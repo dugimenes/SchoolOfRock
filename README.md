@@ -12,7 +12,6 @@ padrões arquiteturais para gestão eficiente de conteúdos educacionais, alunos
 
 O projeto consiste em:
 
-- **Aplicação MVC:** Interface web para interação com o blog.
 - **API RESTful:** Exposição dos recursos do blog para integração com outras aplicações ou desenvolvimento de front-ends alternativos.
 - **Autenticação e Autorização:** Implementação de controle de acesso, diferenciando administradores e usuários comuns.
 - **Acesso a Dados:** Implementação de acesso ao banco de dados através de ORM.
@@ -39,9 +38,10 @@ A estrutura do projeto é organizada da seguinte forma:
   - SchoolOfRock.Domain/ - Projeto MVC
   - SchoolOfRock.Api/ - API RESTful
   - SchoolOfRock.Infraestructure/ - Modelos de Dados e Configuração do EF Core
-- README.md - Arquivo de Documentação do Projeto
-- FEEDBACK.md - Arquivo para Consolidação dos Feedbacks
-- .gitignore - Arquivo de Ignoração do Git
+  - SchoolOfRock.Tests/ - Projeto Responsável por testes Integrados e Unitários
+   - README.md - Arquivo de Documentação do Projeto
+   - FEEDBACK.md - Arquivo para Consolidação dos Feedbacks
+   - .gitignore - Arquivo de Ignoração do Git
 
 ## **5. Funcionalidades Implementadas**
 
@@ -61,22 +61,17 @@ A estrutura do projeto é organizada da seguinte forma:
 ### **Passos para Execução**
 
 1. **Clone o Repositório:**
-   - `git clone https://github.com/dugimenes/Web.Chat.git`
-   - `cd Web.Chat`
+   - `git clone https://github.com/dugimenes/SchoolOfRock.git`
+   - `cd SchoolOfRock`
 
 2. **Configuração do Banco de Dados:**
    - No arquivo `appsettings.json`, configure a string de conexão do SQL Server.
    - Rode o projeto para que a configuração do Seed crie o banco e popule com os dados básicos
 
-3. **Executar a Aplicação MVC:**
-   - `cd src/Blog.Web/`
+3. **Executar a API:**
+   - `cd src/SchoolOfRock.Api/`
    - `dotnet run`
-   - Acesse a aplicação em: https://localhost:7207
-
-4. **Executar a API:**
-   - `cd src/Blog.Api/`
-   - `dotnet run`
-   - Acesse a documentação da API em: http://localhost:7053/swagger
+   - Acesse a documentação da API em: http://localhost:7292/swagger
 
 ## **7. Instruções de Configuração**
 
@@ -87,7 +82,7 @@ A estrutura do projeto é organizada da seguinte forma:
 
 A documentação da API está disponível através do Swagger. Após iniciar a API, acesse a documentação em:
 
-https://localhost:7053/swagger
+https://localhost:7292/swagger
 
 ## **9. Avaliação**
 
