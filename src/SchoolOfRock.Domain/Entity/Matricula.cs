@@ -4,6 +4,7 @@
     {
         public Guid CursoId { get; private set; }
         public Guid AlunoId { get; private set; }
+        public virtual Aluno Aluno { get; private set; }
         public DateTime DataMatricula { get; private set; }
         public StatusMatricula Status { get; private set; }
 

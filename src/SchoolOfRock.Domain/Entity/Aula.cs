@@ -5,9 +5,8 @@
         public string Titulo { get; private set; }
         public string Conteudo { get; private set; }
         public string? MaterialUrl { get; private set; }
-
         public Guid CursoId { get; private set; }
-        public Curso Curso { get; private set; }
+        public virtual Curso Curso { get; private set; }
 
         protected Aula() { }
 
