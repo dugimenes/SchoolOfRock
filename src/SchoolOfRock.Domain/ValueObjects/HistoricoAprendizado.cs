@@ -1,9 +1,18 @@
-﻿namespace SchoolOfRock.Domain.ValueObjects
+﻿using SchoolOfRock.Domain.Entity;
+
+namespace SchoolOfRock.Domain.ValueObjects
 {
     public class HistoricoAprendizado
     {
-        public List<Guid> AulasConcluidas { get; private set; } = new List<Guid>();
+        private readonly List<AulaConcluida> _aulasConcluidas = new();
+
+        public IReadOnlyCollection<AulaConcluida> AulasConcluidas => _aulasConcluidas.AsReadOnly();
 
         protected HistoricoAprendizado() { }
+
+        public void AdicionarAulaConcluida(AulaConcluida aula)
+        {
+            _aulasConcluidas.Add(aula);
+        }
     }
 }

@@ -11,7 +11,7 @@ using SchoolOfRock.Infraestructure;
 namespace SchoolOfRock.Infraestructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250429193754_InitialCreate")]
+    [Migration("20250429204025_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -404,6 +404,87 @@ namespace SchoolOfRock.Infraestructure.Migrations
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("SchoolOfRock.Domain.Entity.Aluno", b =>
+                {
+                    b.OwnsOne("SchoolOfRock.Domain.ValueObjects.DadosCartao", "DadosCartao", b1 =>
+                        {
+                            b1.Property<Guid>("AlunoId")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<string>("Cvv")
+                                .IsRequired()
+                                .HasColumnType("TEXT")
+                                .HasColumnName("CartaoCvv");
+
+                            b1.Property<string>("Expiracao")
+                                .IsRequired()
+                                .HasColumnType("TEXT")
+                                .HasColumnName("CartaoExpiracao");
+
+                            b1.Property<string>("NomeTitular")
+                                .IsRequired()
+                                .HasColumnType("TEXT")
+                                .HasColumnName("CartaoNomeTitular");
+
+                            b1.Property<string>("Numero")
+                                .IsRequired()
+                                .HasColumnType("TEXT")
+                                .HasColumnName("CartaoNumero");
+
+                            b1.HasKey("AlunoId");
+
+                            b1.ToTable("Alunos");
+
+                            b1.WithOwner()
+                                .HasForeignKey("AlunoId");
+                        });
+
+                    b.OwnsOne("SchoolOfRock.Domain.ValueObjects.HistoricoAprendizado", "HistoricoAprendizado", b1 =>
+                        {
+                            b1.Property<Guid>("AlunoId")
+                                .HasColumnType("TEXT");
+
+                            b1.HasKey("AlunoId");
+
+                            b1.ToTable("Alunos");
+
+                            b1.WithOwner()
+                                .HasForeignKey("AlunoId");
+
+                            b1.OwnsMany("SchoolOfRock.Domain.Entity.AulaConcluida", "AulasConcluidas", b2 =>
+                                {
+                                    b2.Property<Guid>("AulaId")
+                                        .ValueGeneratedOnAdd()
+                                        .HasColumnType("TEXT")
+                                        .HasColumnName("AulaId");
+
+                                    b2.Property<Guid>("AlunoId")
+                                        .HasColumnType("TEXT");
+
+                                    b2.Property<DateTime>("DataConclusao")
+                                        .HasColumnType("TEXT")
+                                        .HasColumnName("DataConclusao");
+
+                                    b2.HasKey("AulaId", "AlunoId");
+
+                                    b2.HasIndex("AlunoId");
+
+                                    b2.ToTable("AulaConcluida");
+
+                                    b2.WithOwner()
+                                        .HasForeignKey("AlunoId");
+                                });
+
+                            b1.Navigation("AulasConcluidas");
+                        });
+
+                    b.Navigation("DadosCartao")
+                        .IsRequired();
+
+                    b.Navigation("HistoricoAprendizado")
                         .IsRequired();
                 });
 

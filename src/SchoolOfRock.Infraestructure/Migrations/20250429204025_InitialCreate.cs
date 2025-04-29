@@ -17,7 +17,11 @@ namespace SchoolOfRock.Infraestructure.Migrations
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     Nome = table.Column<string>(type: "TEXT", maxLength: 150, nullable: false),
-                    Email = table.Column<string>(type: "TEXT", maxLength: 150, nullable: false)
+                    Email = table.Column<string>(type: "TEXT", maxLength: 150, nullable: false),
+                    CartaoNumero = table.Column<string>(type: "TEXT", nullable: false),
+                    CartaoNomeTitular = table.Column<string>(type: "TEXT", nullable: false),
+                    CartaoExpiracao = table.Column<string>(type: "TEXT", nullable: false),
+                    CartaoCvv = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -74,6 +78,25 @@ namespace SchoolOfRock.Infraestructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Cursos", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AulaConcluida",
+                columns: table => new
+                {
+                    AulaId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    AlunoId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    DataConclusao = table.Column<DateTime>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AulaConcluida", x => new { x.AulaId, x.AlunoId });
+                    table.ForeignKey(
+                        name: "FK_AulaConcluida_Alunos_AlunoId",
+                        column: x => x.AlunoId,
+                        principalTable: "Alunos",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -312,6 +335,11 @@ namespace SchoolOfRock.Infraestructure.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_AulaConcluida_AlunoId",
+                table: "AulaConcluida",
+                column: "AlunoId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Aulas_CursoId",
                 table: "Aulas",
                 column: "CursoId");
@@ -366,6 +394,9 @@ namespace SchoolOfRock.Infraestructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "AulaConcluida");
 
             migrationBuilder.DropTable(
                 name: "Aulas");

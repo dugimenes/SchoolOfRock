@@ -404,6 +404,87 @@ namespace SchoolOfRock.Infraestructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("SchoolOfRock.Domain.Entity.Aluno", b =>
+                {
+                    b.OwnsOne("SchoolOfRock.Domain.ValueObjects.DadosCartao", "DadosCartao", b1 =>
+                        {
+                            b1.Property<Guid>("AlunoId")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<string>("Cvv")
+                                .IsRequired()
+                                .HasColumnType("TEXT")
+                                .HasColumnName("CartaoCvv");
+
+                            b1.Property<string>("Expiracao")
+                                .IsRequired()
+                                .HasColumnType("TEXT")
+                                .HasColumnName("CartaoExpiracao");
+
+                            b1.Property<string>("NomeTitular")
+                                .IsRequired()
+                                .HasColumnType("TEXT")
+                                .HasColumnName("CartaoNomeTitular");
+
+                            b1.Property<string>("Numero")
+                                .IsRequired()
+                                .HasColumnType("TEXT")
+                                .HasColumnName("CartaoNumero");
+
+                            b1.HasKey("AlunoId");
+
+                            b1.ToTable("Alunos");
+
+                            b1.WithOwner()
+                                .HasForeignKey("AlunoId");
+                        });
+
+                    b.OwnsOne("SchoolOfRock.Domain.ValueObjects.HistoricoAprendizado", "HistoricoAprendizado", b1 =>
+                        {
+                            b1.Property<Guid>("AlunoId")
+                                .HasColumnType("TEXT");
+
+                            b1.HasKey("AlunoId");
+
+                            b1.ToTable("Alunos");
+
+                            b1.WithOwner()
+                                .HasForeignKey("AlunoId");
+
+                            b1.OwnsMany("SchoolOfRock.Domain.Entity.AulaConcluida", "AulasConcluidas", b2 =>
+                                {
+                                    b2.Property<Guid>("AulaId")
+                                        .ValueGeneratedOnAdd()
+                                        .HasColumnType("TEXT")
+                                        .HasColumnName("AulaId");
+
+                                    b2.Property<Guid>("AlunoId")
+                                        .HasColumnType("TEXT");
+
+                                    b2.Property<DateTime>("DataConclusao")
+                                        .HasColumnType("TEXT")
+                                        .HasColumnName("DataConclusao");
+
+                                    b2.HasKey("AulaId", "AlunoId");
+
+                                    b2.HasIndex("AlunoId");
+
+                                    b2.ToTable("AulaConcluida");
+
+                                    b2.WithOwner()
+                                        .HasForeignKey("AlunoId");
+                                });
+
+                            b1.Navigation("AulasConcluidas");
+                        });
+
+                    b.Navigation("DadosCartao")
+                        .IsRequired();
+
+                    b.Navigation("HistoricoAprendizado")
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("SchoolOfRock.Domain.Entity.Aula", b =>
                 {
                     b.HasOne("SchoolOfRock.Domain.Entity.Curso", "Curso")
