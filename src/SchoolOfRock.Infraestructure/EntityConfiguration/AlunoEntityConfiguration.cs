@@ -30,10 +30,27 @@ namespace SchoolOfRock.Infraestructure.Configuration
 
             builder.OwnsOne(a => a.DadosCartao, navigationBuilder =>
             {
-                navigationBuilder.Property(dc => dc.Numero).HasColumnName("CartaoNumero");
-                navigationBuilder.Property(dc => dc.NomeTitular).HasColumnName("CartaoNomeTitular");
-                navigationBuilder.Property(dc => dc.Expiracao).HasColumnName("CartaoExpiracao");
-                navigationBuilder.Property(dc => dc.Cvv).HasColumnName("CartaoCvv");
+                navigationBuilder
+                    .Property(dc => dc.Numero)
+                    .HasColumnName("CartaoNumero")
+                    .HasMaxLength(100)
+                    .IsRequired(false);
+
+                navigationBuilder
+                    .Property(dc => dc.NomeTitular)
+                    .HasColumnName("CartaoNomeTitular")
+                    .HasMaxLength(100)
+                    .IsRequired(false);
+
+                navigationBuilder
+                    .Property(dc => dc.Expiracao)
+                    .HasColumnName("CartaoExpiracao")
+                    .IsRequired(false);
+
+                navigationBuilder
+                    .Property(dc => dc.Cvv)
+                    .HasColumnName("CartaoCvv")
+                    .IsRequired(false);
             });
 
             builder.OwnsOne(a => a.HistoricoAprendizado, historico =>
@@ -50,7 +67,7 @@ namespace SchoolOfRock.Infraestructure.Configuration
                         .HasColumnName("DataConclusao")
                         .IsRequired();
 
-                    aulas.HasKey("AulaId", "AlunoId"); // Composite Key!
+                    aulas.HasKey("AulaId", "AlunoId");
                 });
             });
         }
