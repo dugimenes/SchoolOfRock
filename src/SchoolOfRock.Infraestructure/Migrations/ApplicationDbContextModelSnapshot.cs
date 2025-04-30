@@ -310,9 +310,6 @@ namespace SchoolOfRock.Infraestructure.Migrations
                     b.Property<Guid>("AlunoId")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("AlunoId1")
-                        .HasColumnType("TEXT");
-
                     b.Property<Guid>("CursoId")
                         .HasColumnType("TEXT");
 
@@ -325,8 +322,6 @@ namespace SchoolOfRock.Infraestructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AlunoId");
-
-                    b.HasIndex("AlunoId1");
 
                     b.HasIndex("CursoId", "AlunoId")
                         .IsUnique();
@@ -537,14 +532,6 @@ namespace SchoolOfRock.Infraestructure.Migrations
                         .HasForeignKey("AlunoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("SchoolOfRock.Domain.Entity.Aluno", "Aluno")
-                        .WithMany()
-                        .HasForeignKey("AlunoId1")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Aluno");
                 });
 
             modelBuilder.Entity("SchoolOfRock.Domain.Entity.Pagamento", b =>

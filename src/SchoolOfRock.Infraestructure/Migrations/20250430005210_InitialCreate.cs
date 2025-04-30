@@ -126,7 +126,6 @@ namespace SchoolOfRock.Infraestructure.Migrations
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     CursoId = table.Column<Guid>(type: "TEXT", nullable: false),
                     AlunoId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    AlunoId1 = table.Column<Guid>(type: "TEXT", nullable: false),
                     DataMatricula = table.Column<DateTime>(type: "TEXT", nullable: false),
                     Status = table.Column<int>(type: "INTEGER", nullable: false)
                 },
@@ -136,12 +135,6 @@ namespace SchoolOfRock.Infraestructure.Migrations
                     table.ForeignKey(
                         name: "FK_Matriculas_Alunos_AlunoId",
                         column: x => x.AlunoId,
-                        principalTable: "Alunos",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Matriculas_Alunos_AlunoId1",
-                        column: x => x.AlunoId1,
                         principalTable: "Alunos",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -359,11 +352,6 @@ namespace SchoolOfRock.Infraestructure.Migrations
                 name: "IX_Matriculas_AlunoId",
                 table: "Matriculas",
                 column: "AlunoId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Matriculas_AlunoId1",
-                table: "Matriculas",
-                column: "AlunoId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Matriculas_CursoId_AlunoId",

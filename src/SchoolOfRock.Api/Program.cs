@@ -1,4 +1,5 @@
 using SchoolOfRock.Api.Configuration;
+using SchoolOfRock.Infraestructure.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,5 +24,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+await app.SeedDatabaseAsync();
 
 app.Run();
