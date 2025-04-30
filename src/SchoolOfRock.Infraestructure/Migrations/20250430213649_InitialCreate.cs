@@ -18,10 +18,10 @@ namespace SchoolOfRock.Infraestructure.Migrations
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     Nome = table.Column<string>(type: "TEXT", maxLength: 150, nullable: false),
                     Email = table.Column<string>(type: "TEXT", maxLength: 150, nullable: false),
-                    CartaoNumero = table.Column<string>(type: "TEXT", nullable: false),
-                    CartaoNomeTitular = table.Column<string>(type: "TEXT", nullable: false),
-                    CartaoExpiracao = table.Column<string>(type: "TEXT", nullable: false),
-                    CartaoCvv = table.Column<string>(type: "TEXT", nullable: false)
+                    CartaoNumero = table.Column<string>(type: "TEXT", maxLength: 100, nullable: true),
+                    CartaoNomeTitular = table.Column<string>(type: "TEXT", maxLength: 100, nullable: true),
+                    CartaoExpiracao = table.Column<string>(type: "TEXT", nullable: true),
+                    CartaoCvv = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {

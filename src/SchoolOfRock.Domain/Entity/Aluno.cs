@@ -22,6 +22,12 @@ namespace SchoolOfRock.Domain.Entity
 
         }
 
+        public Aluno(string nome, string email)
+        {
+            Nome = nome;
+            Email = email;
+        }
+
         public void AdicionarMatricula(Matricula matricula)
         {
             Matriculas.Add(matricula);

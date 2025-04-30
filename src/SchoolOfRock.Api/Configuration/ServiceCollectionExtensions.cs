@@ -6,7 +6,9 @@ using Microsoft.OpenApi.Models;
 using SchoolOfRock.Domain.Models;
 using SchoolOfRock.Infraestructure;
 using System.Text;
-using PCF.Core.Identity;
+using SchoolOfRock.Infraestructure.Identity;
+using SchoolOfRock.Infraestructure.Repository;
+using SchoolOfRock.Infraestructure.Services;
 
 namespace SchoolOfRock.Api.Configuration
 {
@@ -86,7 +88,10 @@ namespace SchoolOfRock.Api.Configuration
             }
 
             services.AddHttpContextAccessor();
-            //services.AddScoped(typeof(IUserService), typeof(UserService<ApplicationUser>));
+
+            services.AddScoped<ITokenGenerator, TokenGenerator>();
+            services.AddScoped<IAppIdentityUser, AppIdentityUser>();
+            services.AddScoped<IUserRepository, UserRepository>();
 
             if (!string.IsNullOrEmpty(jwtSettings?.Segredo))
             {

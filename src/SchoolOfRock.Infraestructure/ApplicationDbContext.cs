@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using PCF.Core.Identity;
 using SchoolOfRock.Domain.Entity;
+using SchoolOfRock.Infraestructure.Identity;
 
 namespace SchoolOfRock.Infraestructure
 {

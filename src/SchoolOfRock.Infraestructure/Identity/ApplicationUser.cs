@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace PCF.Core.Identity
+namespace SchoolOfRock.Infraestructure.Identity
 {
     public class ApplicationUser : IdentityUser
     {
