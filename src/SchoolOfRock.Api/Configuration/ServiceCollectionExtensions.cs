@@ -73,8 +73,8 @@ namespace SchoolOfRock.Api.Configuration
                     options.UseSqlServer(connection));
             }
 
-            services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddRoles<IdentityRole>()
+            services.AddIdentity<ApplicationUser, ApplicationRole>()
+                .AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             var jwtSettingsSection = configuration.GetSection("JwtSettings");
@@ -92,6 +92,7 @@ namespace SchoolOfRock.Api.Configuration
             services.AddScoped<ITokenGenerator, TokenGenerator>();
             services.AddScoped<IAppIdentityUser, AppIdentityUser>();
             services.AddScoped<IUserRepository, UserRepository>();
+
 
             if (!string.IsNullOrEmpty(jwtSettings?.Segredo))
             {

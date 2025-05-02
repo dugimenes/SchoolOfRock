@@ -22,7 +22,7 @@ namespace SchoolOfRock.Infraestructure.Services
                 new Claim(ClaimTypes.Name, user.UserName!)
             };
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]!));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSettings:Segredo"]!));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var expiracao = DateTime.UtcNow.AddHours(3);
@@ -31,8 +31,8 @@ namespace SchoolOfRock.Infraestructure.Services
                 claims: claims,
                 expires: expiracao,
                 signingCredentials: creds,
-                issuer: configuration["Jwt:Issuer"],
-                audience: configuration["Jwt:Audience"]
+                issuer: configuration["Jwt:Emissor"],
+                audience: configuration["Jwt:Audiencia"]
             );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
