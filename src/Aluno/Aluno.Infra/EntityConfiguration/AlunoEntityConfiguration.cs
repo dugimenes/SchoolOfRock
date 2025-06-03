@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Aluno.Infra.EntityConfiguration
 {
-    public class AlunoEntityConfiguration : IEntityTypeConfiguration<Aluno>
+    public class AlunoEntityConfiguration : IEntityTypeConfiguration<Domain.AggregateModel.Aluno>
     {
-        public void Configure(EntityTypeBuilder<Aluno> builder)
+        public void Configure(EntityTypeBuilder<Domain.AggregateModel.Aluno> builder)
         {
             builder.HasKey(a => a.Id);
 

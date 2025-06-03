@@ -1,6 +1,6 @@
-﻿using SchoolOfRock.Infraestructure.Identity;
+﻿using Identity.Domain.AggregateModel;
 
-namespace SchoolOfRock.Infraestructure.Services
+namespace SchoolOfRock.Api.Services
 {
     public interface ITokenGenerator
     {

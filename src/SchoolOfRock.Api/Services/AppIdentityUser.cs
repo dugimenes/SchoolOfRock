@@ -1,10 +1,8 @@
-﻿using Microsoft.IdentityModel.JsonWebTokens;
+﻿using IdentityModel;
+using Microsoft.IdentityModel.JsonWebTokens;
 using System.Security.Claims;
-using IdentityModel;
-using SchoolOfRock.Infraestructure.Identity;
-using Microsoft.AspNetCore.Http;
 
-namespace SchoolOfRock.Infraestructure.Services
+namespace SchoolOfRock.Api.Services
 {
     public class AppIdentityUser : IAppIdentityUser
     {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace Identity.Domain.Entity
+namespace Identity.Domain.AggregateModel
 {
     public class ApplicationUser : IdentityUser
     {

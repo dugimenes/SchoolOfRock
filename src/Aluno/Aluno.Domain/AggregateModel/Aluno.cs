@@ -1,6 +1,8 @@
-﻿namespace Aluno.Domain.Entity
+﻿using SchoolOfRock.Shared;
+
+namespace Aluno.Domain.AggregateModel
 {
-    public class Aluno : Common.Entity
+    public class Aluno : Entity
     {
         public string Nome { get; private set; }
         public string Email { get; private set; }
@@ -17,7 +19,6 @@
             Nome = nome;
             Email = email;
             DadosCartao = dadosCartao;
-
         }
 
         public Aluno(string nome, string email)

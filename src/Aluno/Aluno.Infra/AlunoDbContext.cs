@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Aluno.Domain.AggregateModel;
+using Microsoft.EntityFrameworkCore;
 
 namespace Aluno.Infra
 {
@@ -8,7 +9,7 @@ namespace Aluno.Infra
         {
         }
 
-        public DbSet<Aluno> Alunos { get; set; }
+        public DbSet<Domain.AggregateModel.Aluno> Alunos { get; set; }
         public DbSet<Matricula> Matriculas { get; set; }
         public DbSet<Certificado> Certificados { get; set; }
 

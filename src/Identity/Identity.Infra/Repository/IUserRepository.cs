@@ -1,4 +1,4 @@
-﻿using Identity.Domain.Entity;
+﻿using Identity.Domain.AggregateModel;
 using SchoolOfRock.Shared.Repository;
 
 namespace Identity.Infra.Repository

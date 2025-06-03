@@ -1,6 +1,8 @@
-﻿namespace Aluno.Domain.Entity
+﻿using SchoolOfRock.Shared;
+
+namespace Aluno.Domain.AggregateModel
 {
-    public class Certificado : Common.Entity
+    public class Certificado : Entity
     {
         public Guid CursoId { get; private set; }
         public Guid AlunoId { get; private set; }

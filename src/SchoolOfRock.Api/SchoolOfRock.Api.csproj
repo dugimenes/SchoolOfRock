@@ -17,4 +17,8 @@
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.4" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Identity\Identity.Domain\Identity.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

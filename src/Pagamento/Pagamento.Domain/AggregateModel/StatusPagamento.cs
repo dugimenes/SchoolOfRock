@@ -1,4 +1,4 @@
-﻿namespace Pagamento.Domain.Entity
+﻿namespace Pagamento.Domain.AggregateModel
 {
     public enum StatusPagamento
     {

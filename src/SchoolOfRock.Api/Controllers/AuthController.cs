@@ -2,10 +2,10 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using SchoolOfRock.Api.Services;
 using SchoolOfRock.Infraestructure.Identity;
 using SchoolOfRock.Infraestructure.Repository;
 using SchoolOfRock.Infraestructure.Responses.Login;
-using SchoolOfRock.Infraestructure.Services;
 
 namespace SchoolOfRock.Api.Controllers
 {

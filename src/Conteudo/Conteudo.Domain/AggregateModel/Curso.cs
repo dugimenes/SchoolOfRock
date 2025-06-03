@@ -1,4 +1,4 @@
-﻿namespace Conteudo.Domain.Entity
+﻿namespace Conteudo.Domain.AggregateModel
 {
     public class Curso : SchoolOfRock.Shared.Entity
     {

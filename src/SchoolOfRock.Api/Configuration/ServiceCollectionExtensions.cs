@@ -6,9 +6,8 @@ using Microsoft.OpenApi.Models;
 using SchoolOfRock.Domain.Models;
 using SchoolOfRock.Infraestructure;
 using System.Text;
-using SchoolOfRock.Infraestructure.Identity;
 using SchoolOfRock.Infraestructure.Repository;
-using SchoolOfRock.Infraestructure.Services;
+using SchoolOfRock.Api.Services;
 
 namespace SchoolOfRock.Api.Configuration
 {

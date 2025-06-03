@@ -1,4 +1,4 @@
-﻿using Conteudo.Domain.Entity;
+﻿using Conteudo.Domain.AggregateModel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

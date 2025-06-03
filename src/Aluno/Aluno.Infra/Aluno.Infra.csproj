@@ -28,4 +28,9 @@
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.9.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Shared\SchoolOfRock.Shared\SchoolOfRock.Shared.csproj" />
+    <ProjectReference Include="..\Aluno.Domain\Aluno.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

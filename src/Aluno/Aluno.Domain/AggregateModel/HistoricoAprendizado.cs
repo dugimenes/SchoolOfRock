@@ -1,4 +1,4 @@
-﻿namespace Aluno.Domain.Entity
+﻿namespace Aluno.Domain.AggregateModel
 {
     public class HistoricoAprendizado
     {

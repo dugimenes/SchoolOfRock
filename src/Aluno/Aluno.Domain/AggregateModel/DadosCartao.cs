@@ -1,4 +1,4 @@
-﻿namespace Pagamento.Domain.Entity
+﻿namespace Aluno.Domain.AggregateModel
 {
     public class DadosCartao
     {

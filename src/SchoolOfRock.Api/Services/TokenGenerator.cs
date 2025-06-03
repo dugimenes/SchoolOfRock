@@ -1,11 +1,10 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Identity.Domain.AggregateModel;
 using Microsoft.IdentityModel.Tokens;
-using SchoolOfRock.Infraestructure.Identity;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace SchoolOfRock.Infraestructure.Services
+namespace SchoolOfRock.Api.Services
 {
     public class TokenGenerator(IConfiguration configuration) : ITokenGenerator
     {

@@ -1,4 +1,4 @@
-﻿using Identity.Domain.Entity;
+﻿using Identity.Domain.AggregateModel;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SchoolOfRock.Shared.Repository;
