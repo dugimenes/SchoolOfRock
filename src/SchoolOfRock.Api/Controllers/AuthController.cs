@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Identity.Application.Responses.Login;
+using Identity.Domain.AggregateModel;
+using Identity.Infra.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SchoolOfRock.Api.Services;
-using SchoolOfRock.Infraestructure.Identity;
-using SchoolOfRock.Infraestructure.Repository;
-using SchoolOfRock.Infraestructure.Responses.Login;
 
 namespace SchoolOfRock.Api.Controllers
 {

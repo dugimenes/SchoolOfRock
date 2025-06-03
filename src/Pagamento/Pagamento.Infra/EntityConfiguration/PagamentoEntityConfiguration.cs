@@ -35,10 +35,8 @@ namespace Pagamento.Infra.EntityConfiguration
             //        .HasColumnName("CartaoCvv");
             //});
 
-            builder.HasOne<Matricula>()
-                .WithMany()
-                .HasForeignKey(p => p.MatriculaId)
-                .OnDelete(DeleteBehavior.Cascade);
+            builder.Property(p => p.MatriculaId)
+                .IsRequired();
         }
     }
 }

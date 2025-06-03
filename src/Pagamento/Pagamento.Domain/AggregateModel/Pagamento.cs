@@ -5,15 +5,13 @@ namespace Pagamento.Domain.Entity
     public class Pagamento : SchoolOfRock.Shared.Entity
     {
         public Guid MatriculaId { get; private set; }
-        //public DadosCartao DadosCartao { get; private set; }
         public StatusPagamento StatusPagamento { get; private set; }
 
         protected Pagamento() { }
 
-        public Pagamento(Guid matriculaId /*DadosCartao dadosCartao*/)
+        public Pagamento(Guid matriculaId)
         {
             MatriculaId = matriculaId;
-            //DadosCartao = dadosCartao;
             StatusPagamento = StatusPagamento.Pendente;
         }
 

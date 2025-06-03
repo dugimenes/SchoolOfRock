@@ -1,9 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using SchoolOfRock.Infraestructure.Data.Seeders;
 
-namespace SchoolOfRock.Shared.Configuration
+namespace Conteudo.Infra.Seeders
 {
     public static class HostSeederExtensions
     {
@@ -11,7 +10,7 @@ namespace SchoolOfRock.Shared.Configuration
         {
             using var scope = host.Services.CreateScope();
             var services = scope.ServiceProvider;
-            var db = services.GetRequiredService<ApplicationDbContext>();
+            var db = services.GetRequiredService<ConteudoDbContext>();
 
             // Executa migrations
             await db.Database.MigrateAsync();

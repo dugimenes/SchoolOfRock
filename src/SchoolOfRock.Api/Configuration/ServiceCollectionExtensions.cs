@@ -3,11 +3,15 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using SchoolOfRock.Domain.Models;
-using SchoolOfRock.Infraestructure;
-using System.Text;
-using SchoolOfRock.Infraestructure.Repository;
 using SchoolOfRock.Api.Services;
+using SchoolOfRock.Domain.Models;
+using System.Text;
+using Aluno.Infra;
+using Conteudo.Infra;
+using Identity.Domain.AggregateModel;
+using Identity.Infra;
+using Identity.Infra.Repository;
+using Pagamento.Infra;
 
 namespace SchoolOfRock.Api.Configuration
 {
@@ -62,19 +66,58 @@ namespace SchoolOfRock.Api.Configuration
             if (environment == "Development")
             {
                 var connection = configuration.GetConnectionString("SqliteConnection");
-                services.AddDbContext<ApplicationDbContext>(options =>
+                services.AddDbContext<AlunoDbContext>(options =>
                     options.UseSqlite(connection));
             }
             else
             {
                 var connection = configuration.GetConnectionString("SqlServerConnection");
-                services.AddDbContext<ApplicationDbContext>(options =>
+                services.AddDbContext<AlunoDbContext>(options =>
+                    options.UseSqlServer(connection));
+            }
+
+            if (environment == "Development")
+            {
+                var connection = configuration.GetConnectionString("SqliteConnection");
+                services.AddDbContext<ConteudoDbContext>(options =>
+                    options.UseSqlite(connection));
+            }
+            else
+            {
+                var connection = configuration.GetConnectionString("SqlServerConnection");
+                services.AddDbContext<ConteudoDbContext>(options =>
+                    options.UseSqlServer(connection));
+            }
+
+            if (environment == "Development")
+            {
+                var connection = configuration.GetConnectionString("SqliteConnection");
+                services.AddDbContext<PagamentoDbContext>(options =>
+                    options.UseSqlite(connection));
+            }
+            else
+            {
+                var connection = configuration.GetConnectionString("SqlServerConnection");
+                services.AddDbContext<PagamentoDbContext>(options =>
+                    options.UseSqlServer(connection));
+            }
+
+            if (environment == "Development")
+            {
+                var connection = configuration.GetConnectionString("SqliteConnection");
+                services.AddDbContext<IdentityDbContext>(options =>
+                    options.UseSqlite(connection));
+            }
+            else
+            {
+                var connection = configuration.GetConnectionString("SqlServerConnection");
+                services.AddDbContext<IdentityDbContext>(options =>
                     options.UseSqlServer(connection));
             }
 
             services.AddIdentity<ApplicationUser, ApplicationRole>()
                 .AddDefaultTokenProviders()
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddEntityFrameworkStores<IdentityDbContext>();
 
             var jwtSettingsSection = configuration.GetSection("JwtSettings");
             services.Configure<JwtSettings>(jwtSettingsSection);
