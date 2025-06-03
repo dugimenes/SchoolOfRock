@@ -1,0 +1,21 @@
+Id,Nome,ConteudoProgramatico
+11111111-1111-1111-1111-111111111001,Lógica de Programação,Aprenda os fundamentos essenciais da lógica computacional.
+11111111-1111-1111-1111-111111111002,Algoritmos com C#,Crie algoritmos práticos usando a linguagem C#.
+11111111-1111-1111-1111-111111111003,HTML e CSS Avançado,Crie páginas responsivas com boas práticas de semântica e layout.
+11111111-1111-1111-1111-111111111004,JavaScript Moderno,Utilize ES6+ para desenvolver aplicações ricas e dinâmicas.
+11111111-1111-1111-1111-111111111005,Desenvolvimento com ASP.NET Core,"Construa APIs REST com segurança, validação e boas práticas."
+11111111-1111-1111-1111-111111111006,Entity Framework Core,Mapeamento objeto-relacional com código limpo e performático.
+11111111-1111-1111-1111-111111111007,SQL Server para Desenvolvedores,"Domine criação, consultas e otimização de banco de dados."
+11111111-1111-1111-1111-111111111008,Git e Controle de Versão,"Trabalhe com GitFlow, branches e merge com confiança."
+11111111-1111-1111-1111-111111111009,Clean Code com C#,"Escreva código legível, desacoplado e testável."
+11111111-1111-1111-1111-111111111010,Docker para Desenvolvedores .NET,Containerize sua aplicação .NET e prepare para a nuvem.
+11111111-1111-1111-1111-111111111011,Introdução a Redes de Computadores,Entenda conceitos essenciais de redes e protocolos.
+11111111-1111-1111-1111-111111111012,Segurança em Aplicações Web,"Previna falhas como XSS, CSRF e SQL Injection."
+11111111-1111-1111-1111-111111111013,Arquitetura de Software com DDD,Construa aplicações organizadas com Domain-Driven Design.
+11111111-1111-1111-1111-111111111014,Blazor WebAssembly,Desenvolva SPAs com C# e sem JavaScript.
+11111111-1111-1111-1111-111111111015,Mensageria com RabbitMQ,Implemente comunicação assíncrona com filas e tópicos.
+11111111-1111-1111-1111-111111111016,Azure DevOps e Pipelines,Automatize testes e deploy com CI/CD no Azure.
+11111111-1111-1111-1111-111111111017,Inteligência Artificial para Devs,"Explore IA, redes neurais e algoritmos simples."
+11111111-1111-1111-1111-111111111018,Machine Learning com ML.NET,Treine modelos preditivos no ecossistema .NET.
+11111111-1111-1111-1111-111111111019,React com .NET Core,Consuma APIs com React e componha interfaces modernas.
+11111111-1111-1111-1111-111111111020,Microserviços com ASP.NET,Divida aplicações grandes em serviços independentes.

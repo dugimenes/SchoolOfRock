@@ -1,5 +1,5 @@
+using Conteudo.Infra.Seeders;
 using SchoolOfRock.Api.Configuration;
-using SchoolOfRock.Infraestructure.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 

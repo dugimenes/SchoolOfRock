@@ -18,7 +18,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SchoolOfRock.Infraestructure\SchoolOfRock.Infraestructure.csproj" />
+    <ProjectReference Include="..\Aluno\Aluno.Infra\Aluno.Infra.csproj" />
+    <ProjectReference Include="..\Conteudo\Conteudo.Infra\Conteudo.Infra.csproj" />
+    <ProjectReference Include="..\Identity\Identity.Application\Identity.Application.csproj" />
+    <ProjectReference Include="..\Identity\Identity.Domain\Identity.Domain.csproj" />
+    <ProjectReference Include="..\Identity\Identity.Infra\Identity.Infra.csproj" />
+    <ProjectReference Include="..\Pagamento\Pagamento.Infra\Pagamento.Infra.csproj" />
   </ItemGroup>
 
 </Project>
