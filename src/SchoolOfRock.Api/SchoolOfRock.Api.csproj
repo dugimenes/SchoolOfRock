@@ -17,8 +17,4 @@
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.4" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\SchoolOfRock.Infraestructure\SchoolOfRock.Infraestructure.csproj" />
-  </ItemGroup>
-
 </Project>

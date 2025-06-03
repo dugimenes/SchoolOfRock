@@ -7,15 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Update="Data\Seed\cursos.csv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Data\Seed\aulas.csv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="CsvHelper" Version="33.0.1" />
     <PackageReference Include="IdentityModel" Version="7.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.4">
@@ -38,7 +29,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SchoolOfRock.Domain\SchoolOfRock.Domain.csproj" />
+    <Folder Include="EntityConfiguration\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Shared\SchoolOfRock.Shared\SchoolOfRock.Shared.csproj" />
+    <ProjectReference Include="..\Identity.Domain\Identity.Domain.csproj" />
   </ItemGroup>
 
 </Project>
