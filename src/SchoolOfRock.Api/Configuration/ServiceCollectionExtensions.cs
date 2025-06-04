@@ -12,6 +12,7 @@ using Identity.Domain.AggregateModel;
 using Identity.Infra;
 using Identity.Infra.Repository;
 using Pagamento.Infra;
+using SchoolOfRock.Shared.Repository;
 
 namespace SchoolOfRock.Api.Configuration
 {
@@ -63,56 +64,66 @@ namespace SchoolOfRock.Api.Configuration
                 });
             });
 
+            services.AddScoped(typeof(IRepository<,>), typeof(Repository<,>));
+
             if (environment == "Development")
             {
                 var connection = configuration.GetConnectionString("SqliteConnection");
                 services.AddDbContext<AlunoDbContext>(options =>
-                    options.UseSqlite(connection));
+                    options.UseSqlite(connection,
+                        sql => sql.MigrationsAssembly("SchoolOfRock.Data")));
             }
             else
             {
                 var connection = configuration.GetConnectionString("SqlServerConnection");
                 services.AddDbContext<AlunoDbContext>(options =>
-                    options.UseSqlServer(connection));
+                    options.UseSqlServer(connection,
+                        sql => sql.MigrationsAssembly("SchoolOfRock.Data")));
             }
 
             if (environment == "Development")
             {
                 var connection = configuration.GetConnectionString("SqliteConnection");
                 services.AddDbContext<ConteudoDbContext>(options =>
-                    options.UseSqlite(connection));
+                    options.UseSqlite(connection, 
+                        sql => sql.MigrationsAssembly("SchoolOfRock.Data")));
             }
             else
             {
                 var connection = configuration.GetConnectionString("SqlServerConnection");
                 services.AddDbContext<ConteudoDbContext>(options =>
-                    options.UseSqlServer(connection));
+                    options.UseSqlServer(connection,
+                        sql => sql.MigrationsAssembly("SchoolOfRock.Data")));
             }
 
             if (environment == "Development")
             {
                 var connection = configuration.GetConnectionString("SqliteConnection");
                 services.AddDbContext<PagamentoDbContext>(options =>
-                    options.UseSqlite(connection));
+                    options.UseSqlite(connection,
+                        sql => sql.MigrationsAssembly("SchoolOfRock.Data")));
             }
             else
             {
                 var connection = configuration.GetConnectionString("SqlServerConnection");
                 services.AddDbContext<PagamentoDbContext>(options =>
-                    options.UseSqlServer(connection));
+                    options.UseSqlServer(connection,
+                        sql => sql.MigrationsAssembly("SchoolOfRock.Data")));
             }
 
             if (environment == "Development")
             {
                 var connection = configuration.GetConnectionString("SqliteConnection");
                 services.AddDbContext<IdentityDbContext>(options =>
-                    options.UseSqlite(connection));
+                    options.UseSqlite(connection,
+                        sql => sql.MigrationsAssembly("SchoolOfRock.Data")));
             }
             else
             {
                 var connection = configuration.GetConnectionString("SqlServerConnection");
                 services.AddDbContext<IdentityDbContext>(options =>
-                    options.UseSqlServer(connection));
+                    options.UseSqlServer(connection, 
+                        sql => sql.MigrationsAssembly("SchoolOfRock.Data")));
             }
 
             services.AddIdentity<ApplicationUser, ApplicationRole>()

@@ -1,6 +1,8 @@
-﻿namespace Conteudo.Domain.AggregateModel
+﻿using SchoolOfRock.Shared;
+
+namespace Conteudo.Domain.AggregateModel
 {
-    public class Curso : SchoolOfRock.Shared.Entity
+    public class Curso : Entity
     {
         public Guid Id { get; set; }
         public string Nome { get; private set; }

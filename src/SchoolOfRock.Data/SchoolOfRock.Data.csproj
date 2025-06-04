@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Aluno\Aluno.Infra\Aluno.Infra.csproj" />
+    <ProjectReference Include="..\Conteudo\Conteudo.Infra\Conteudo.Infra.csproj" />
+    <ProjectReference Include="..\Identity\Identity.Infra\Identity.Infra.csproj" />
+    <ProjectReference Include="..\Pagamento\Pagamento.Infra\Pagamento.Infra.csproj" />
+    <ProjectReference Include="..\Shared\SchoolOfRock.Shared\SchoolOfRock.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Banco\" />
+  </ItemGroup>
+
+</Project>

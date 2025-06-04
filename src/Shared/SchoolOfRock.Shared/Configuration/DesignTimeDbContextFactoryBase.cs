@@ -1,70 +1,97 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
+using System;
+using System.IO;
 
 namespace SchoolOfRock.Shared.Configuration
 {
     /// <summary>
     /// Classe base genérica para DesignTimeDbContextFactory.
-    /// Qualquer DbContext concreto pode herdar dela e simplesmente
-    /// implementar o método CreateNewInstance, passando seu próprio tipo.
+    /// Centraliza a lógica de:
+    /// 1) Detectar ASPNETCORE_ENVIRONMENT
+    /// 2) Carregar appsettings.json do projeto de API
+    /// 3) Configurar o DbContextOptionsBuilder (SQLite vs SQL Server)
+    /// 4) Apontar as Migrations para o assembly Shared
+    /// 5) Invocar CreateNewInstance(options) na subclasse concreta
     /// </summary>
     /// <typeparam name="TContext">O DbContext que será instanciado</typeparam>
     public abstract class DesignTimeDbContextFactoryBase<TContext>
         : IDesignTimeDbContextFactory<TContext>
         where TContext : DbContext
     {
-        /// <summary>
-        /// Abaixo definimos a lógica comum que:
-        /// 1) Obtém a variável de ambiente "ASPNETCORE_ENVIRONMENT"
-        /// 2) Constrói o IConfiguration (appsettings.json + appsettings.{Environment}.json)
-        /// 3) Monta o DbContextOptionsBuilder<TContext> escolhendo provider conforme a environment
-        /// 4) Chama CreateNewInstance para criar o contexto específico
-        /// </summary>
         public TContext CreateDbContext(string[] args)
         {
             // 1) Descobrir a environment (Development, Staging, Production, etc.)
             var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")
                               ?? "Development";
 
-            // 2) Construir o configuration a partir dos arquivos appsettings
+            // 2) Como geralmente o comando 'dotnet ef' roda no diretório do projeto passado em --project,
+            //    precisamos “voltar” para a pasta do projeto de API que contém o appsettings.json.
+            //
+            //    Exemplo de estrutura:
+            //    /MinhaSolucao
+            //      /SchoolOfRock.API          <-- Contém appsettings.json
+            //      /SchoolOfRock.Shared       <-- Aqui está esta classe base
+            //      /Aluno.Infra               <-- Possui AlunoDbContext e a sua factory concreta
+            //      /School.Infra              <-- Possui SchoolDbContext e a sua factory concreta
+            //      /Sales.Infra               <-- Possui SalesDbContext e a sua factory concreta
+            //
+            //    Se o CreateDbContext for invocado dentro de 'SchoolOfRock.Shared', Directory.GetCurrentDirectory()
+            //    retornará algo como ".../SchoolOfRock.Shared". Então, precisamos subir um nível e ir para "SchoolOfRock.API".
+
+            var sharedFolder = Directory.GetCurrentDirectory();
+            var migrationsAssembly = "SchoolOfRock.Data";
+
+            // Ajuste este caminho caso seu projeto API tenha nome ou estrutura diferente.
+            // Aqui assumimos que o projeto de API chama-se “SchoolOfRock.API” e vive no mesmo nível que Shared.
+            var apiProjectPath = Path.Combine(sharedFolder, "..", "SchoolOfRock.API");
+
+            // 3) Construir o IConfiguration direcionado para a pasta do API
             var configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
+                .SetBasePath(apiProjectPath)
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{environment}.json", optional: true, reloadOnChange: true)
                 .Build();
 
-            // 3) Criar o builder de opções para o TContext
+            // 4) Criar o builder de opções para o TContext
             var optionsBuilder = new DbContextOptionsBuilder<TContext>();
 
-            // 4) Lógica genérica para escolher provider 
-            //    (no exemplo, SQLite para Dev e SQL Server para outro ambiente)
+            // 5) Lógica genérica de escolha de provider e apontar MigrationsAssembly para o Shared
             if (environment == "Development")
             {
                 var sqliteConn = configuration.GetConnectionString("SqliteConnection");
-                if (string.IsNullOrEmpty(sqliteConn))
+                if (string.IsNullOrWhiteSpace(sqliteConn))
                     throw new InvalidOperationException("ConnectionString 'SqliteConnection' não encontrada.");
 
-                optionsBuilder.UseSqlite(sqliteConn);
+                optionsBuilder.UseSqlite(sqliteConn, sqlOptions =>
+                {
+                    // Indica que as migrations estão no assembly do projeto Shared
+                    sqlOptions.MigrationsAssembly(migrationsAssembly);
+                });
             }
             else
             {
                 var sqlServerConn = configuration.GetConnectionString("SqlServerConnection");
-                if (string.IsNullOrEmpty(sqlServerConn))
+                if (string.IsNullOrWhiteSpace(sqlServerConn))
                     throw new InvalidOperationException("ConnectionString 'SqlServerConnection' não encontrada.");
 
-                optionsBuilder.UseSqlServer(sqlServerConn);
+                optionsBuilder.UseSqlServer(sqlServerConn, sqlOptions =>
+                {
+                    sqlOptions.MigrationsAssembly(migrationsAssembly);
+                });
             }
 
-            // 5) Delegar à subclasse a criação da instância concreta de TContext
+            // 6) Delegar à subclasse a criação da instância concreta de TContext
             return CreateNewInstance(optionsBuilder.Options);
         }
 
         /// <summary>
-        /// Método abstrato que cada fábrica concreta terá que implementar.
-        /// Deve retornar uma nova instância de TContext usando as opções fornecidas.
+        /// As subclasses concretas precisam implementar este método para instanciar
+        /// o respectivo TContext usando as opções fornecidas.
+        /// Exemplo: return new MeuDbContext(options);
         /// </summary>
-        /// <param name="options">Opções já configuradas no DbContextOptionsBuilder</param>
+        /// <param name="options">Opções já configuradas (UseSqlite ou UseSqlServer)</param>
         protected abstract TContext CreateNewInstance(DbContextOptions<TContext> options);
     }
 }

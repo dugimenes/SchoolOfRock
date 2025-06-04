@@ -39,6 +39,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.Application", "src
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SchoolOfRock.Shared", "src\Shared\SchoolOfRock.Shared\SchoolOfRock.Shared.csproj", "{7686B759-CBE7-4ECC-B372-14296EA8B2D9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SchoolOfRock.Data", "src\SchoolOfRock.Data\SchoolOfRock.Data.csproj", "{7EC76C7C-5E68-4A15-8686-C2812440881C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -101,6 +103,10 @@ Global
 		{7686B759-CBE7-4ECC-B372-14296EA8B2D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7686B759-CBE7-4ECC-B372-14296EA8B2D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7686B759-CBE7-4ECC-B372-14296EA8B2D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7EC76C7C-5E68-4A15-8686-C2812440881C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7EC76C7C-5E68-4A15-8686-C2812440881C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7EC76C7C-5E68-4A15-8686-C2812440881C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7EC76C7C-5E68-4A15-8686-C2812440881C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

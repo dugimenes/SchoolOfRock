@@ -1,8 +1,8 @@
-﻿using Pagamento.Domain.AggregateModel;
+﻿using SchoolOfRock.Shared;
 
-namespace Pagamento.Domain.Entity
+namespace Pagamento.Domain.AggregateModel
 {
-    public class Pagamento : SchoolOfRock.Shared.Entity
+    public class Pagamento : Entity
     {
         public Guid MatriculaId { get; private set; }
         public StatusPagamento StatusPagamento { get; private set; }

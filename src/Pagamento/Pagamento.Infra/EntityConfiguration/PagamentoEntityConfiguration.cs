@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Pagamento.Infra.EntityConfiguration
 {
-    public class PagamentoEntityConfiguration : IEntityTypeConfiguration<Domain.Entity.Pagamento>
+    public class PagamentoEntityConfiguration : IEntityTypeConfiguration<Domain.AggregateModel.Pagamento>
     {
-        public void Configure(EntityTypeBuilder<Domain.Entity.Pagamento> builder)
+        public void Configure(EntityTypeBuilder<Domain.AggregateModel.Pagamento> builder)
         {
             builder.HasKey(p => p.Id);
 

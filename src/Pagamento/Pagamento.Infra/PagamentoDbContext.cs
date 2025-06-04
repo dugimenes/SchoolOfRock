@@ -8,7 +8,7 @@ namespace Pagamento.Infra
         {
         }
 
-        public DbSet<Domain.Entity.Pagamento> Pagamentos { get; set; }
+        public DbSet<Domain.AggregateModel.Pagamento> Pagamentos { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

@@ -13,6 +13,10 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.4" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="8.1.1" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.9.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
 
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.4" />
   </ItemGroup>
@@ -24,6 +28,7 @@
     <ProjectReference Include="..\Identity\Identity.Domain\Identity.Domain.csproj" />
     <ProjectReference Include="..\Identity\Identity.Infra\Identity.Infra.csproj" />
     <ProjectReference Include="..\Pagamento\Pagamento.Infra\Pagamento.Infra.csproj" />
+    <ProjectReference Include="..\SchoolOfRock.Data\SchoolOfRock.Data.csproj" />
   </ItemGroup>
 
 </Project>
