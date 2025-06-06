@@ -9,6 +9,8 @@
   <ItemGroup>
 
     <PackageReference Include="IdentityModel" Version="7.0.0" />
+
+    <PackageReference Include="MediatR" Version="12.5.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.4" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="8.1.1" />
@@ -22,11 +24,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Aluno\Aluno.Application\Aluno.Application.csproj" />
     <ProjectReference Include="..\Aluno\Aluno.Infra\Aluno.Infra.csproj" />
+    <ProjectReference Include="..\Conteudo\Conteudo.Application\Conteudo.Application.csproj" />
     <ProjectReference Include="..\Conteudo\Conteudo.Infra\Conteudo.Infra.csproj" />
     <ProjectReference Include="..\Identity\Identity.Application\Identity.Application.csproj" />
     <ProjectReference Include="..\Identity\Identity.Domain\Identity.Domain.csproj" />
     <ProjectReference Include="..\Identity\Identity.Infra\Identity.Infra.csproj" />
+    <ProjectReference Include="..\Pagamento\Pagamento.Application\Pagamento.Application.csproj" />
     <ProjectReference Include="..\Pagamento\Pagamento.Infra\Pagamento.Infra.csproj" />
     <ProjectReference Include="..\SchoolOfRock.Data\SchoolOfRock.Data.csproj" />
   </ItemGroup>

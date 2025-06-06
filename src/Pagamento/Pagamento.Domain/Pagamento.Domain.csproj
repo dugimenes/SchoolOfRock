@@ -7,6 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MediatR.Contracts" Version="2.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\SchoolOfRock.Contracts\SchoolOfRock.Contracts.csproj" />
     <ProjectReference Include="..\..\Shared\SchoolOfRock.Shared\SchoolOfRock.Shared.csproj" />
   </ItemGroup>
 

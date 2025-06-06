@@ -1,4 +1,5 @@
-﻿using SchoolOfRock.Shared;
+﻿using Aluno.Domain.Enumerations;
+using SchoolOfRock.Shared;
 
 namespace Aluno.Domain.AggregateModel
 {
@@ -22,14 +23,24 @@ namespace Aluno.Domain.AggregateModel
 
         public void ConfirmarPagamento()
         {
+            if (Status == StatusMatricula.Ativa)
+            {
+                throw new InvalidOperationException("Esta matrícula já está ativa.");
+            }
+            if (Status == StatusMatricula.Concluida)
+            {
+                throw new InvalidOperationException("Não é possível alterar uma matrícula concluída.");
+            }
             Status = StatusMatricula.Ativa;
         }
-    }
 
-    public enum StatusMatricula
-    {
-        PendentePagamento,
-        Ativa,
-        Concluida
+        public void Concluir()
+        {
+            if (Status != StatusMatricula.Ativa)
+            {
+                throw new InvalidOperationException("A matrícula deve estar ativa para ser concluída.");
+            }
+            Status = StatusMatricula.Concluida;
+        }
     }
 }
