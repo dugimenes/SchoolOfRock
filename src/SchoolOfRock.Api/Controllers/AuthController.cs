@@ -1,72 +1,49 @@
-﻿using Identity.Application.Responses.Login;
-using Identity.Domain.AggregateModel;
-using Identity.Infra.Repository;
+﻿using Identity.Application.Command;
+using Identity.Application.Queries;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using SchoolOfRock.Api.Services;
 
 namespace SchoolOfRock.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     [AllowAnonymous]
-    public class AuthController(IUserRepository userRepository, ITokenGenerator tokenGenerator) : BaseController
+    public class AuthController : BaseController
     {
-        [HttpPost("login")]
-        public async Task<Results<Ok<string>, UnauthorizedHttpResult, StatusCodeHttpResult>> Login([FromBody] LoginRequest loginRequest)
+        private readonly IMediator _mediator;
+
+        public AuthController(IMediator mediator)
         {
-            try
-            {
-                var user = await userRepository.FindByEmailAsync(loginRequest.Login);
+            _mediator = mediator;
+        }
 
-                if (user != null && await userRepository.CheckPasswordAsync(user, loginRequest.Password))
-                {
-                    var token = tokenGenerator.GerarToken(user);
-                    return TypedResults.Ok(token);
-                }
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginQuery query)
+        {
+            var result = await _mediator.Send(query);
 
-                return TypedResults.Unauthorized();
-            }
-            catch
+            if (!result.Sucesso)
             {
-                return TypedResults.StatusCode(500);
+                return Unauthorized(new { message = result.Erro });
             }
+
+            return Ok(new { token = result.Token });
         }
 
         [HttpPost("register")]
-        public async Task<Results<Ok, Conflict, StatusCodeHttpResult>> Register([FromBody] RegisterRequest registerRequest)
+        public async Task<IActionResult> Register([FromBody] RegisterCommand command)
         {
             try
             {
-                // Verifica se o usuário já existe
-                var user = await userRepository.FindByEmailAsync(registerRequest.Login);
-
-                if (user == null)
-                {
-                    // Cria um novo IdentityUser
-                    var newUser = new ApplicationUser
-                    {
-                        UserName = registerRequest.Name,
-                        Email = registerRequest.Login,
-                    };
-
-                    // Hash da senha
-                    var passwordHasher = new PasswordHasher<ApplicationUser>();
-                    newUser.PasswordHash = passwordHasher.HashPassword(newUser, registerRequest.Password);
-
-                    // Salva o usuário no banco
-                    await userRepository.CreateAsync(newUser, registerRequest.Name);
-
-                    return TypedResults.Ok();
-                }
-
-                return TypedResults.Conflict();
+                var userId = await _mediator.Send(command);
+                // Retorna o ID do novo usuário criado
+                return Ok(new { message = "Usuário registrado com sucesso.", userId });
             }
-            catch
+            catch (Exception ex)
             {
-                return TypedResults.StatusCode(500);
+                // O handler lança uma exceção se o e-mail já existir
+                return Conflict(new { message = ex.Message });
             }
         }
     }

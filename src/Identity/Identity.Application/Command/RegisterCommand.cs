@@ -1,9 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using MediatR;
+using System.ComponentModel.DataAnnotations;
 
-namespace Identity.Application.Responses.Login
+namespace Identity.Application.Command
 {
-    public class LoginRequest
+    public class RegisterCommand : IRequest<Guid>
     {
+        [Required]
+        public required string Name { get; set; }
+
         [Required]
         [DataType(DataType.EmailAddress)]
         [EmailAddress]

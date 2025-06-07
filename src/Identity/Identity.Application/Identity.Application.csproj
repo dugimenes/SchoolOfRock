@@ -10,6 +10,7 @@
     <ProjectReference Include="..\..\SchoolOfRock.Contracts\SchoolOfRock.Contracts.csproj" />
     <ProjectReference Include="..\..\Shared\SchoolOfRock.Shared\SchoolOfRock.Shared.csproj" />
     <ProjectReference Include="..\Identity.Domain\Identity.Domain.csproj" />
+    <ProjectReference Include="..\Identity.Infra\Identity.Infra.csproj" />
   </ItemGroup>
 
 </Project>

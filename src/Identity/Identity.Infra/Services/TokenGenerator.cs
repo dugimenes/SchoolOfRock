@@ -3,8 +3,9 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.Extensions.Configuration;
 
-namespace SchoolOfRock.Api.Services
+namespace Identity.Infra.Services
 {
     public class TokenGenerator(IConfiguration configuration) : ITokenGenerator
     {

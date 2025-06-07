@@ -7,12 +7,16 @@ using SchoolOfRock.Api.Services;
 using SchoolOfRock.Domain.Models;
 using System.Text;
 using Aluno.Infra;
+using Aluno.Infra.Repository;
 using Conteudo.Infra;
+using Conteudo.Infra.Repository;
 using Identity.Domain.AggregateModel;
 using Identity.Infra;
 using Identity.Infra.Repository;
 using Pagamento.Infra;
+using Pagamento.Infra.Repository;
 using SchoolOfRock.Shared.Repository;
+using Identity.Infra.Services;
 
 namespace SchoolOfRock.Api.Configuration
 {
@@ -145,7 +149,10 @@ namespace SchoolOfRock.Api.Configuration
             services.AddScoped<ITokenGenerator, TokenGenerator>();
             services.AddScoped<IAppIdentityUser, AppIdentityUser>();
             services.AddScoped<IUserRepository, UserRepository>();
-
+            services.AddScoped<IAlunoRepository, AlunoRepository>();
+            services.AddScoped<IPagamentoRepository, PagamentoRepository>();
+            services.AddScoped<ICursoRepository, CursoRepository>();
+            services.AddScoped<IMatriculaRepository, MatriculaRepository>();
 
             if (!string.IsNullOrEmpty(jwtSettings?.Segredo))
             {
