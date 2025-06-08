@@ -21,7 +21,7 @@ namespace Identity.Application.Handlers
         {
             if (await _userRepository.FindByEmailAsync(request.Login) != null)
             {
-                throw new Exception("O e-mail já está em uso."); // Ou um resultado customizado
+                throw new Exception("O e-mail já está em uso.");
             }
 
             var newUser = new ApplicationUser
@@ -33,13 +33,20 @@ namespace Identity.Application.Handlers
             var passwordHasher = new PasswordHasher<ApplicationUser>();
             newUser.PasswordHash = passwordHasher.HashPassword(newUser, request.Password);
 
-            var userSalvo = await _userRepository.CreateAsync(newUser);
+            var result = await _userRepository.CreateAsync(newUser);
+            
+            newUser.Cadastrar();
 
-            // Dispara o evento de integração para outros contextos (ex: AlunoContext) reagirem
-            //var userRegisteredEvent = new UserRegisteredEvent(userSalvo.Id, userSalvo.UserName, userSalvo.Email);
-            //await _mediator.Publish(userRegisteredEvent, cancellationToken);
+            await _userRepository.SaveChangesAsync();
 
-            return Guid.Parse(userSalvo.Id);
+            foreach (var domainEvent in newUser.DomainEvents)
+            {
+                await _mediator.Publish(domainEvent, cancellationToken);
+            }
+
+            newUser.ClearDomainEvents();
+
+            return Guid.Parse(newUser.Id);
         }
     }
 }

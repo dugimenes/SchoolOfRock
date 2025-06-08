@@ -1,4 +1,5 @@
 ﻿using Identity.Domain.AggregateModel;
+using Microsoft.EntityFrameworkCore;
 using SchoolOfRock.Shared.Repository;
 
 namespace Identity.Infra.Repository
@@ -8,5 +9,6 @@ namespace Identity.Infra.Repository
         Task<ApplicationUser?> FindByEmailAsync(string email);
         Task<bool> CheckPasswordAsync(ApplicationUser user, string password);
         Task<ApplicationUser> CreateAsync(ApplicationUser entity, string userName);
+        Task<int> SaveChangesAsync();
     }
 }

@@ -14,11 +14,19 @@ namespace Aluno.Domain.AggregateModel
 
         protected Aluno() { }
 
-        public Aluno(string nome, string email, DadosCartao dadosCartao)
+        public Aluno(Guid id, string nome, string email, DadosCartao dadosCartao)
         {
+            Id = id;
             Nome = nome;
             Email = email;
             DadosCartao = dadosCartao;
+        }
+
+        public Aluno(Guid id, string nome, string email)
+        {
+            Id = id;
+            Nome = nome;
+            Email = email;
         }
 
         public Aluno(string nome, string email)

@@ -21,46 +21,28 @@ namespace Identity.Infra.Repository
             return Task.FromResult(result == PasswordVerificationResult.Success);
         }
 
-        public Task<ApplicationUser> CreateAsync(ApplicationUser entity, string userName)
+        public async Task<ApplicationUser> CreateAsync(ApplicationUser entity, string userName)
         {
-            throw new NotImplementedException();
-            //TODO : Implementar criação do usuário com o ApplicationUser e Aluno
+            using var transaction = await _dbContext.Database.BeginTransactionAsync();
+
+            try
+            {
+                var result = await base.CreateAsync(entity);
+                await _dbContext.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                return result;
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
         }
 
-        //public async Task<ApplicationUser> CreateAsync(ApplicationUser entity, string userName)
-        //{
-        //    using var transaction = await _dbContext.Database.BeginTransactionAsync();
-
-        //    try
-        //    {
-        //        // Cria o ApplicationUser
-        //        var result = await base.CreateAsync(entity);
-
-        //        // Adiciona o Usuario correspondente
-        //        var appUser = new Aluno(userName!, entity.Email!);
-
-        //        if (Guid.TryParse(entity.Id, out var guid))
-        //        {
-        //            appUser.Id = guid;
-        //        }
-        //        else
-        //        {
-        //            throw new Exception("ID do usuário inválido.");
-        //        }
-
-
-        //        await _dbContext.Alunos.AddAsync(appUser);
-
-        //        await _dbContext.SaveChangesAsync();
-        //        await transaction.CommitAsync();
-
-        //        return result;
-        //    }
-        //    catch
-        //    {
-        //        await transaction.RollbackAsync();
-        //        throw;
-        //    }
-        //}
+        public async Task<int> SaveChangesAsync()
+        {
+            return await _dbContext.SaveChangesAsync();
+        }
     }
 }

@@ -37,12 +37,10 @@ namespace SchoolOfRock.Api.Controllers
             try
             {
                 var userId = await _mediator.Send(command);
-                // Retorna o ID do novo usuário criado
                 return Ok(new { message = "Usuário registrado com sucesso.", userId });
             }
             catch (Exception ex)
             {
-                // O handler lança uma exceção se o e-mail já existir
                 return Conflict(new { message = ex.Message });
             }
         }

@@ -1,22 +1,27 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Aluno.Infra;
+using Aluno.Infra.Repository;
+using Conteudo.Application.Command;
+using Conteudo.Application.Queries;
+using Conteudo.Infra;
+using Conteudo.Infra.Repository;
+using Identity.Application.Command;
+using Identity.Application.Queries;
+using Identity.Domain.AggregateModel;
+using Identity.Infra;
+using Identity.Infra.Repository;
+using Identity.Infra.Services;
+using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using SchoolOfRock.Api.Services;
-using SchoolOfRock.Domain.Models;
-using System.Text;
-using Aluno.Infra;
-using Aluno.Infra.Repository;
-using Conteudo.Infra;
-using Conteudo.Infra.Repository;
-using Identity.Domain.AggregateModel;
-using Identity.Infra;
-using Identity.Infra.Repository;
 using Pagamento.Infra;
 using Pagamento.Infra.Repository;
+using SchoolOfRock.Api.Services;
+using SchoolOfRock.Domain.Models;
 using SchoolOfRock.Shared.Repository;
-using Identity.Infra.Services;
+using System.Text;
 
 namespace SchoolOfRock.Api.Configuration
 {
@@ -39,6 +44,15 @@ namespace SchoolOfRock.Api.Configuration
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
+
+            services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(
+                typeof(RegisterCommand).Assembly,
+                typeof(LoginQuery).Assembly,
+                typeof(CriarCursoCommand).Assembly,
+                typeof(ObterCursoPorIdQuery).Assembly,
+                typeof(Aluno.Application.Handlers.UsuarioCriadoHandler).Assembly,
+                typeof(Pagamento.Application.Command.ConfirmarPagamentoCommand).Assembly
+            ));
 
             services.AddSwaggerGen(c =>
             {
@@ -146,6 +160,7 @@ namespace SchoolOfRock.Api.Configuration
 
             services.AddHttpContextAccessor();
 
+            services.AddScoped<IMediator, Mediator>();
             services.AddScoped<ITokenGenerator, TokenGenerator>();
             services.AddScoped<IAppIdentityUser, AppIdentityUser>();
             services.AddScoped<IUserRepository, UserRepository>();
