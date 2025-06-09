@@ -37,6 +37,20 @@ namespace SchoolOfRock.Api.Controllers
             return Ok(curso);
         }
 
+        [HttpGet("/listar")]
+        public async Task<IActionResult> Listar()
+        {
+            var query = new ListarCursosQuery();
+            var curso = await _mediator.Send(query);
+
+            if (curso == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(curso);
+        }
+
         [HttpPost("{id}/aulas")]
         public async Task<IActionResult> AdicionarAula(Guid id, [FromBody] AdicionarAulaRequest request)
         {
