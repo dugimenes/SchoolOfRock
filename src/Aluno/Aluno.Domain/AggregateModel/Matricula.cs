@@ -15,6 +15,7 @@ namespace Aluno.Domain.AggregateModel
 
         public Matricula(Guid cursoId, Guid alunoId)
         {
+            Id = Guid.NewGuid();
             CursoId = cursoId;
             AlunoId = alunoId;
             DataMatricula = DateTime.UtcNow;

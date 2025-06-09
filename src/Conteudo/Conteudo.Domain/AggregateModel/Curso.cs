@@ -20,6 +20,7 @@ namespace Conteudo.Domain.AggregateModel
 
         public Curso(string nome, ConteudoProgramatico conteudoProgramatico)
         {
+            Id = Guid.NewGuid();
             Nome = nome;
             ConteudoProgramatico = conteudoProgramatico;
         }

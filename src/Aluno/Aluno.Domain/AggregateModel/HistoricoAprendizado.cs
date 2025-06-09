@@ -6,7 +6,10 @@
 
         public IReadOnlyCollection<AulaConcluida> AulasConcluidas => _aulasConcluidas.AsReadOnly();
 
-        protected HistoricoAprendizado() { }
+        public HistoricoAprendizado()
+        {
+            
+        }
 
         public void AdicionarAulaConcluida(AulaConcluida aula)
         {

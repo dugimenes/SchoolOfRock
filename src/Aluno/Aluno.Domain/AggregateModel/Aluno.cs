@@ -7,7 +7,7 @@ namespace Aluno.Domain.AggregateModel
         public string Nome { get; private set; }
         public string Email { get; private set; }
         public DadosCartao DadosCartao { get; private set; }
-        public HistoricoAprendizado HistoricoAprendizado { get; private set; }
+        public HistoricoAprendizado HistoricoAprendizado { get; private set; } = new();
 
         public ICollection<Matricula> Matriculas { get; private set; } = new List<Matricula>();
         public ICollection<Certificado> Certificados { get; private set; } = new List<Certificado>();

@@ -42,7 +42,11 @@ namespace SchoolOfRock.Tests.Pagamento.Application
             Assert.True(result);
             Assert.Equal(StatusPagamento.Confirmado, pagamento.StatusPagamento);
             _pagamentoRepositoryMock.Verify(r => r.SaveChangesAsync(), Times.Once);
-            _mediatorMock.Verify(m => m.Publish(It.IsAny<PagamentoConfirmadoEvent>(), CancellationToken.None), Times.Once);
+            
+            _mediatorMock.Verify(m => m.Publish(
+                    It.Is<INotification>(notification => notification is PagamentoConfirmadoEvent),
+                    It.IsAny<CancellationToken>()),
+                Times.Once);
         }
     }
 }

@@ -34,9 +34,13 @@ namespace SchoolOfRock.Tests.Identity.Application
             };
 
             _userRepositoryMock.Setup(r => r.FindByEmailAsync(command.Login)).ReturnsAsync((ApplicationUser)null);
-            _userRepositoryMock.Setup(r => r.CreateAsync(It.IsAny<ApplicationUser>()))
-                .ReturnsAsync((ApplicationUser user) => user);
 
+            _userRepositoryMock.Setup(r => r.CreateAsync(It.IsAny<ApplicationUser>()))
+                .ReturnsAsync((ApplicationUser user) =>
+                {
+                    user.Id = Guid.NewGuid().ToString();
+                    return user;
+                });
 
             // Act
             var userId = await _handler.Handle(command, CancellationToken.None);
@@ -45,7 +49,11 @@ namespace SchoolOfRock.Tests.Identity.Application
             Assert.NotEqual(Guid.Empty, userId);
             _userRepositoryMock.Verify(r => r.CreateAsync(It.Is<ApplicationUser>(u => u.Email == command.Login)), Times.Once);
             _userRepositoryMock.Verify(r => r.SaveChangesAsync(), Times.Once);
-            _mediatorMock.Verify(m => m.Publish(It.IsAny<UsuarioCriadoEvent>(), CancellationToken.None), Times.Once);
+
+            _mediatorMock.Verify(m => m.Publish(
+                    It.Is<INotification>(notification => notification is UsuarioCriadoEvent),
+                    It.IsAny<CancellationToken>()),
+                Times.Once);
         }
     }
 }
