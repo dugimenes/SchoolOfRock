@@ -25,7 +25,7 @@ namespace SchoolOfRock.Api.Controllers
                 return NotFound("Pagamento não encontrado.");
             }
 
-            return Ok("Pagamento confirmado e evento disparado com sucesso.");
+            return Ok("Pagamento confirmado.");
         }
 
     }

@@ -2,16 +2,19 @@
 using Aluno.Domain.AggregateModel;
 using Aluno.Infra.Repository;
 using MediatR;
+using SchoolOfRock.Contracts.Aluno;
 
 namespace Aluno.Application.Handlers
 {
     public class MatricularAlunoCommandHandler : IRequestHandler<MatricularAlunoCommand, Guid>
     {
         private readonly IAlunoRepository _alunoRepository;
+        private readonly IMediator _mediator;
 
-        public MatricularAlunoCommandHandler(IAlunoRepository alunoRepository)
+        public MatricularAlunoCommandHandler(IAlunoRepository alunoRepository, IMediator mediator)
         {
             _alunoRepository = alunoRepository;
+            _mediator = mediator;
         }
 
         public async Task<Guid> Handle(MatricularAlunoCommand request, CancellationToken cancellationToken)
@@ -29,7 +32,7 @@ namespace Aluno.Application.Handlers
             _alunoRepository.Atualizar(aluno);
             await _alunoRepository.SaveChangesAsync();
 
-            // Aqui você publicaria um evento 'AlunoMatriculadoEvent' para o PagamentoContext iniciar a cobrança.
+            await _mediator.Publish(new AlunoMatriculadoEvent(novaMatricula.Id, aluno.Id, request.CursoId), cancellationToken);
 
             return novaMatricula.Id;
         }

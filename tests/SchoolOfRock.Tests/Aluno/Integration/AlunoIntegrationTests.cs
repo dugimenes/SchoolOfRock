@@ -29,7 +29,6 @@ namespace SchoolOfRock.Tests.Aluno.Integration
             var aluno = new global::Aluno.Domain.AggregateModel.Aluno(alunoId, "Carlos", "carlos@email.com");
             var matricula = new Matricula(cursoId, alunoId);
 
-            // Simula a conclusão da matrícula
             matricula.ConfirmarPagamento(); // Status: Ativa
             matricula.Concluir();           // Status: Concluida
 
