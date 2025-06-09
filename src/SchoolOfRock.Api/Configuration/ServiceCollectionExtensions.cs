@@ -1,4 +1,5 @@
-﻿using Aluno.Application.Validators;
+﻿using Aluno.Application.Command;
+using Aluno.Application.Validators;
 using Aluno.Infra;
 using Aluno.Infra.Repository;
 using Conteudo.Application.Command;
@@ -51,6 +52,7 @@ namespace SchoolOfRock.Api.Configuration
 
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(
                 typeof(RegisterCommand).Assembly,
+                typeof(MatricularAlunoCommand).Assembly,
                 typeof(LoginQuery).Assembly,
                 typeof(CriarCursoCommand).Assembly,
                 typeof(ObterCursoPorIdQuery).Assembly,

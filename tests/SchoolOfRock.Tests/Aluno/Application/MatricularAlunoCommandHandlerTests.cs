@@ -4,7 +4,7 @@ using Aluno.Domain.AggregateModel;
 using Aluno.Infra.Repository;
 using MediatR;
 using Moq;
-using SchoolOfRock.Contracts.Aluno;
+using SchoolOfRock.Contracts.Aluno.Events;
 using Xunit;
 
 namespace SchoolOfRock.Tests.Aluno.Application

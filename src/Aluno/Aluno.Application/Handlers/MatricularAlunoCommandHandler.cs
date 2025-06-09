@@ -2,7 +2,7 @@
 using Aluno.Domain.AggregateModel;
 using Aluno.Infra.Repository;
 using MediatR;
-using SchoolOfRock.Contracts.Aluno;
+using SchoolOfRock.Contracts.Aluno.Events;
 
 namespace Aluno.Application.Handlers
 {

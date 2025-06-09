@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace SchoolOfRock.Contracts.Aluno
+namespace SchoolOfRock.Contracts.Aluno.Events
 {
     public class AlunoMatriculadoEvent : INotification
     {

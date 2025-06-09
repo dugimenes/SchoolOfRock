@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Pagamento.Infra.Repository;
-using SchoolOfRock.Contracts.Aluno;
+using SchoolOfRock.Contracts.Aluno.Events;
 
 namespace Pagamento.Application.Handlers
 {
