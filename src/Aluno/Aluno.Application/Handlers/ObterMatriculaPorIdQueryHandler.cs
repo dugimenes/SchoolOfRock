@@ -28,8 +28,6 @@ namespace Conteudo.Application.Handlers
                 Id = matricula.Id,
                 DataMatricula = matricula.DataMatricula,
                 Status = matricula.Status
-
-                // ... outras propriedades
             };
 
             return matriculaDto;

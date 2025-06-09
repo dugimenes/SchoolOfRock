@@ -64,6 +64,13 @@ namespace Aluno.Infra.Repository
                 .ToListAsync();
         }
 
+        public async Task<Matricula> ObterPorAlunoECursoIdAsync(Guid alunoId, Guid cursoId)
+        {
+            return await _dbSet
+                .SingleOrDefaultAsync(m => m.AlunoId == alunoId 
+                                      && m.CursoId == cursoId);
+        }
+
         public async Task<IEnumerable<Matricula>> ObterPorCursoIdAsync(Guid cursoId)
         {
             return await _dbSet

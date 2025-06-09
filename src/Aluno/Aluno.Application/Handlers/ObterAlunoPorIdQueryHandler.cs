@@ -23,15 +23,22 @@ namespace Conteudo.Application.Handlers
                 return null;
             }
 
-            var cursoDto = new AlunoDto
+            // Mapeamento da entidade para o DTO
+            var alunoDto = new AlunoDto
             {
                 Id = aluno.Id,
                 Nome = aluno.Nome,
-                Email = aluno.Email
-                // ... outras propriedades
+                Email = aluno.Email,
+                Matriculas = aluno.Matriculas.Select(m => new MatriculaDto
+                {
+                    Id = m.Id,
+                    CursoId = m.CursoId,
+                    Status = m.Status,
+                    DataMatricula = m.DataMatricula
+                }).ToList()
             };
 
-            return cursoDto;
+            return alunoDto;
         }
     }
 }

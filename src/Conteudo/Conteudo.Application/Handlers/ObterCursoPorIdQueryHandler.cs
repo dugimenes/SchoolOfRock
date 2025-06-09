@@ -23,14 +23,19 @@ namespace Conteudo.Application.Handlers
                 return null;
             }
 
-            var cursoDto = new CursoDto
+            return new CursoDto
             {
                 Id = curso.Id,
-                Nome = curso.Nome
-                // ... outras propriedades
+                Nome = curso.Nome,
+                ConteudoProgramatico = curso.ConteudoProgramatico.Descricao,
+                Aulas = curso.Aulas.Select(a => new AulaDto
+                {
+                    Id = a.Id,
+                    Titulo = a.Titulo,
+                    Conteudo = a.Conteudo,
+                    MaterialUrl = a.MaterialUrl
+                }).ToList()
             };
-
-            return cursoDto;
         }
     }
 }

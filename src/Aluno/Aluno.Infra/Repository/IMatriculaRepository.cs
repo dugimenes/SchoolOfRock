@@ -19,5 +19,6 @@ namespace Aluno.Infra.Repository
         Task<IEnumerable<Matricula>> ObterPorAlunoIdAsync(Guid alunoId);
 
         Task<IEnumerable<Matricula>> ObterPorCursoIdAsync(Guid cursoId);
+        Task<Matricula> ObterPorAlunoECursoIdAsync(Guid alunoId, Guid cursoId);
     }
 }

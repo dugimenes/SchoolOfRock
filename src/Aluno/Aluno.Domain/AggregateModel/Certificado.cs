@@ -16,5 +16,14 @@ namespace Aluno.Domain.AggregateModel
             AlunoId = alunoId;
             DataEmissao = DateTime.UtcNow;
         }
+
+        public void AtualizarDataEmissao(DateTime novaDataEmissao)
+        {
+            if (novaDataEmissao <= DateTime.MinValue || novaDataEmissao > DateTime.UtcNow)
+            {
+                throw new ArgumentException("Data de emissão inválida.", nameof(novaDataEmissao));
+            }
+            DataEmissao = novaDataEmissao;
+        }
     }
 }
