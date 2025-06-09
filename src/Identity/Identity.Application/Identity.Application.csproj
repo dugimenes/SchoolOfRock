@@ -11,6 +11,7 @@
     <ProjectReference Include="..\..\Shared\SchoolOfRock.Shared\SchoolOfRock.Shared.csproj" />
     <ProjectReference Include="..\Identity.Domain\Identity.Domain.csproj" />
     <ProjectReference Include="..\Identity.Infra\Identity.Infra.csproj" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
   </ItemGroup>
 
 </Project>

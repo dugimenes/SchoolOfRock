@@ -7,11 +7,11 @@ namespace SchoolOfRock.Tests.Identity.Application
 {
     public class RegisterCommandValidatorTests
     {
-        private readonly RegisterCommandValidator _validator;
+        private readonly Validators.RegisterCommandValidatorTests _validator;
 
         public RegisterCommandValidatorTests()
         {
-            _validator = new RegisterCommandValidator();
+            _validator = new Validators.RegisterCommandValidatorTests();
         }
 
         [Fact]

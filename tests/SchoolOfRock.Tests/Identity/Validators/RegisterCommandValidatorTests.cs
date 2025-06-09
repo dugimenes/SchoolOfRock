@@ -3,9 +3,9 @@ using Identity.Application.Command;
 
 namespace SchoolOfRock.Tests.Identity.Validators
 {
-    public class RegisterCommandValidator : AbstractValidator<RegisterCommand>
+    public class RegisterCommandValidatorTests : AbstractValidator<RegisterCommand>
     {
-        public RegisterCommandValidator()
+        public RegisterCommandValidatorTests()
         {
             RuleFor(x => x.Name)
                 .NotEmpty().WithMessage("O nome é obrigatório.");

@@ -1,10 +1,12 @@
-﻿using FluentValidation;
+﻿using Aluno.Application.Validators;
 using Aluno.Infra;
 using Aluno.Infra.Repository;
 using Conteudo.Application.Command;
 using Conteudo.Application.Queries;
+using Conteudo.Application.Validators;
 using Conteudo.Infra;
 using Conteudo.Infra.Repository;
+using FluentValidation;
 using Identity.Application.Command;
 using Identity.Application.Queries;
 using Identity.Domain.AggregateModel;
@@ -57,6 +59,8 @@ namespace SchoolOfRock.Api.Configuration
             ));
 
             services.AddValidatorsFromAssembly(typeof(RegisterCommand).Assembly);
+            services.AddValidatorsFromAssembly(typeof(MatricularAlunoCommandValidator).Assembly);
+            services.AddValidatorsFromAssembly(typeof(CriarCursoCommandValidator).Assembly);
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
             services.AddSwaggerGen(c =>
