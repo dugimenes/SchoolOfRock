@@ -65,6 +65,8 @@ A estrutura do projeto é organizada da seguinte forma:
    - `cd SchoolOfRock`
 
 2. **Configuração do Banco de Dados:**
+   - **As Migration e Seeds serão aplicados de forma automática.**
+   
    - No arquivo `appsettings.json`, configure a string de conexão do SQL Server.
    - Rode o projeto para que a configuração do Seed crie o banco e popule com os dados básicos
    - Aplicando os contextos
