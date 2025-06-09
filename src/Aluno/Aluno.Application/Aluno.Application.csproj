@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Pagamento\Pagamento.Infra\Pagamento.Infra.csproj" />
     <ProjectReference Include="..\..\SchoolOfRock.Contracts\SchoolOfRock.Contracts.csproj" />
     <ProjectReference Include="..\Aluno.Domain\Aluno.Domain.csproj" />
     <ProjectReference Include="..\Aluno.Infra\Aluno.Infra.csproj" />

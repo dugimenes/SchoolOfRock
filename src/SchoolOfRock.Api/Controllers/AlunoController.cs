@@ -1,4 +1,5 @@
 ﻿using Aluno.Application.Command;
+using Aluno.Application.Dtos;
 using Aluno.Application.Queries;
 using Conteudo.Application.Queries;
 using FluentValidation;
@@ -37,13 +38,19 @@ namespace SchoolOfRock.Api.Controllers
             var command = new MatricularAlunoCommand
             {
                 AlunoId = id,
-                CursoId = request.CursoId
+                CursoId = request.CursoId,
+                DadosCartao = request.DadosCartao
             };
 
             try
             {
-                var matriculaId = await _mediator.Send(command);
-                return Ok(new { message = "Matrícula realizada com sucesso.", matriculaId });
+                var resultado = await _mediator.Send(command);
+                return Ok(new
+                {
+                    message = "Matrícula e Pagamento criados com sucesso.",
+                    matriculaId = resultado.MatriculaId,
+                    pagamentoId = resultado.PagamentoId
+                });
             }
             catch (ValidationException ex)
             {
@@ -93,5 +100,7 @@ namespace SchoolOfRock.Api.Controllers
     public class MatricularAlunoRequest
     {
         public Guid CursoId { get; set; }
+
+        public DadosCartaoDto DadosCartao { get; set; }
     }
 }

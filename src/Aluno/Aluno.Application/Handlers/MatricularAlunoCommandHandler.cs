@@ -1,48 +1,80 @@
 ﻿using Aluno.Application.Command;
 using Aluno.Domain.AggregateModel;
+using Aluno.Infra;
 using Aluno.Infra.Repository;
 using MediatR;
-using SchoolOfRock.Contracts.Aluno.Events;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
+using Pagamento.Infra;
+using Pagamento.Infra.Repository;
 
 namespace Aluno.Application.Handlers
 {
-    public class MatricularAlunoCommandHandler : IRequestHandler<MatricularAlunoCommand, Guid>
+    public class MatricularAlunoCommandHandler : IRequestHandler<MatricularAlunoCommand, MatriculaRealizadaDto>
     {
         private readonly IAlunoRepository _alunoRepository;
-        private readonly IMediator _mediator;
         private readonly IMatriculaRepository _matriculaRepository;
+        private readonly IPagamentoRepository _pagamentoRepository;
 
-        public MatricularAlunoCommandHandler(IAlunoRepository alunoRepository, IMediator mediator, IMatriculaRepository matriculaRepository)
+        private readonly AlunoDbContext _alunoDbContext;
+        private readonly PagamentoDbContext _pagamentoDbContext;
+
+        public MatricularAlunoCommandHandler(IAlunoRepository alunoRepository, IMatriculaRepository matriculaRepository, 
+                                                IPagamentoRepository pagamentoRepository, AlunoDbContext alunoDbContext, PagamentoDbContext pagamentoDbContext)
         {
             _alunoRepository = alunoRepository;
-            _mediator = mediator;
             _matriculaRepository = matriculaRepository;
+            _pagamentoRepository = pagamentoRepository;
+            _alunoDbContext = alunoDbContext;
+            _pagamentoDbContext = pagamentoDbContext;
         }
 
-        public async Task<Guid> Handle(MatricularAlunoCommand request, CancellationToken cancellationToken)
+        public async Task<MatriculaRealizadaDto> Handle(MatricularAlunoCommand request, CancellationToken cancellationToken)
         {
-            var aluno = await _alunoRepository.ObterPorIdAsync(request.AlunoId);
-            if (aluno == null)
+            await using var transaction = await _alunoDbContext.Database.BeginTransactionAsync(cancellationToken);
+
+            try
             {
-                throw new Exception("Aluno não encontrado.");
+                await _pagamentoDbContext.Database.UseTransactionAsync(transaction.GetDbTransaction(), cancellationToken);
+
+                var aluno = await _alunoRepository.ObterPorIdAsync(request.AlunoId);
+                if (aluno == null)
+                {
+                    throw new Exception("Aluno não encontrado.");
+                }
+
+                var matriculaExistente = await _matriculaRepository.ObterPorAlunoECursoIdAsync(request.AlunoId, request.CursoId);
+                if (matriculaExistente != null)
+                {
+                    throw new Exception("Aluno já está matriculado neste curso.");
+                }
+
+                var dadosCartao = new DadosCartao(request.DadosCartao.Numero, request.DadosCartao.NomeTitular, request.DadosCartao.Expiracao, request.DadosCartao.Cvv);
+                aluno.AtualizarDadosCartao(dadosCartao);
+                _alunoRepository.Atualizar(aluno);
+
+                var novaMatricula = new Matricula(request.CursoId, request.AlunoId);
+                await _matriculaRepository.AdicionarAsync(novaMatricula);
+
+                var novoPagamento = new Pagamento.Domain.AggregateModel.Pagamento(novaMatricula.Id);
+                await _pagamentoRepository.AdicionarAsync(novoPagamento);
+
+                await _alunoDbContext.SaveChangesAsync(cancellationToken);
+                await _pagamentoDbContext.SaveChangesAsync(cancellationToken);
+
+                await transaction.CommitAsync(cancellationToken);
+
+                return new MatriculaRealizadaDto
+                {
+                    MatriculaId = novaMatricula.Id,
+                    PagamentoId = novoPagamento.Id
+                };
             }
-
-            var matricula = await _matriculaRepository.ObterPorAlunoECursoIdAsync(request.AlunoId, request.CursoId);
-
-            if (matricula != null)
+            catch (Exception)
             {
-                throw new Exception("Aluno já está matriculado neste curso.");
+                await transaction.RollbackAsync(cancellationToken);
+                throw;
             }
-
-            var novaMatricula = new Matricula(request.CursoId, request.AlunoId);
-
-            await _matriculaRepository.AdicionarAsync(novaMatricula);
-
-            await _matriculaRepository.SaveChangesAsync();
-
-            await _mediator.Publish(new AlunoMatriculadoEvent(novaMatricula.Id, aluno.Id, request.CursoId), cancellationToken);
-
-            return novaMatricula.Id;
         }
     }
 }

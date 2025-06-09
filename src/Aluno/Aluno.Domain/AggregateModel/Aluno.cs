@@ -40,6 +40,11 @@ namespace Aluno.Domain.AggregateModel
             Matriculas.Add(matricula);
         }
 
+        public void AtualizarDadosCartao(DadosCartao dadosCartao)
+        {
+            DadosCartao = dadosCartao ?? throw new ArgumentNullException(nameof(dadosCartao), "Dados do cartão não podem ser nulos.");
+        }
+
         public void ConcluirAula(Guid aulaId, DateTime dataConclusao)
         {
             HistoricoAprendizado.AdicionarAulaConcluida(new AulaConcluida(aulaId, dataConclusao));
