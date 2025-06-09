@@ -7,7 +7,7 @@ using Pagamento.Infra.Repository;
 using SchoolOfRock.Contracts.Pagamento.Events;
 using Xunit;
 
-namespace SchoolOfRock.Tests.Pagamento
+namespace SchoolOfRock.Tests.Pagamento.Application
 {
     public class ConfirmarPagamentoCommandHandlerTests
     {

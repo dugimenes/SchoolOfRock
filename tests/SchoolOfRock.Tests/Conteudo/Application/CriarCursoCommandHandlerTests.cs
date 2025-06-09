@@ -5,7 +5,7 @@ using Conteudo.Infra.Repository;
 using Moq;
 using Xunit;
 
-namespace SchoolOfRock.Tests.Conteudo
+namespace SchoolOfRock.Tests.Conteudo.Application
 {
     public class CriarCursoCommandHandlerTests
     {
