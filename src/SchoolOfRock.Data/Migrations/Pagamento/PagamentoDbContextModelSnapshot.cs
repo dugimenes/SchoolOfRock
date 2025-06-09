@@ -31,7 +31,7 @@ namespace SchoolOfRock.Data.Migrations.Pagamento
 
                     b.HasKey("Id");
 
-                    b.ToTable("Pagamentos");
+                    b.ToTable("Pagamentos", (string)null);
                 });
 #pragma warning restore 612, 618
         }

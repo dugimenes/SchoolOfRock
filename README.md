@@ -67,6 +67,12 @@ A estrutura do projeto é organizada da seguinte forma:
 2. **Configuração do Banco de Dados:**
    - No arquivo `appsettings.json`, configure a string de conexão do SQL Server.
    - Rode o projeto para que a configuração do Seed crie o banco e popule com os dados básicos
+   - Aplicando os contextos
+      - cd /src
+         dotnet ef database update --context AlunoDbContext --project .\SchoolOfRock.Data --startup-project .\SchoolOfRock.API
+         dotnet ef database update --context ConteudoDbContext --project .\SchoolOfRock.Data --startup-project .\SchoolOfRock.API
+         dotnet ef database update --context IdentityDbContext --project .\SchoolOfRock.Data --startup-project .\SchoolOfRock.API
+         dotnet ef database update --context PagamentoDbContext --project .\SchoolOfRock.Data --startup-project .\SchoolOfRock.API
 
 3. **Executar a API:**
    - `cd src/SchoolOfRock.Api/`
