@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Moq" Version="4.20.72" />
+    <PackageReference Include="xunit" Version="2.9.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Aluno\Aluno.Application\Aluno.Application.csproj" />
+    <ProjectReference Include="..\..\src\Aluno\Aluno.Domain\Aluno.Domain.csproj" />
+    <ProjectReference Include="..\..\src\Aluno\Aluno.Infra\Aluno.Infra.csproj" />
+    <ProjectReference Include="..\..\src\Conteudo\Conteudo.Application\Conteudo.Application.csproj" />
+    <ProjectReference Include="..\..\src\Conteudo\Conteudo.Domain\Conteudo.Domain.csproj" />
+    <ProjectReference Include="..\..\src\Conteudo\Conteudo.Infra\Conteudo.Infra.csproj" />
+    <ProjectReference Include="..\..\src\Pagamento\Pagamento.Application\Pagamento.Application.csproj" />
+    <ProjectReference Include="..\..\src\Pagamento\Pagamento.Domain\Pagamento.Domain.csproj" />
+    <ProjectReference Include="..\..\src\Pagamento\Pagamento.Infra\Pagamento.Infra.csproj" />
+  </ItemGroup>
+
+</Project>
