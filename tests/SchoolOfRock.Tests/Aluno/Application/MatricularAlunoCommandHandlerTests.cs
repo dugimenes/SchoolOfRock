@@ -1,5 +1,6 @@
 ﻿using Aluno.Application.Command;
 using Aluno.Application.Handlers;
+using Aluno.Domain.AggregateModel;
 using Aluno.Infra.Repository;
 using MediatR;
 using Moq;
@@ -11,14 +12,16 @@ namespace SchoolOfRock.Tests.Aluno.Application
     public class MatricularAlunoCommandHandlerTests
     {
         private readonly Mock<IAlunoRepository> _alunoRepositoryMock;
+        private readonly Mock<IMatriculaRepository> _matriculaRepositoryMock;
         private readonly MatricularAlunoCommandHandler _handler;
         private readonly Mock<IMediator> _mediatorMock;
 
         public MatricularAlunoCommandHandlerTests()
         {
             _alunoRepositoryMock = new Mock<IAlunoRepository>();
+            _matriculaRepositoryMock = new Mock<IMatriculaRepository>();
             _mediatorMock = new Mock<IMediator>();
-            _handler = new MatricularAlunoCommandHandler(_alunoRepositoryMock.Object, _mediatorMock.Object);
+            _handler = new MatricularAlunoCommandHandler(_alunoRepositoryMock.Object, _mediatorMock.Object, _matriculaRepositoryMock.Object);
         }
 
         [Fact]
@@ -32,8 +35,6 @@ namespace SchoolOfRock.Tests.Aluno.Application
             _alunoRepositoryMock.Setup(r => r.ObterPorIdAsync(alunoId))
                 .ReturnsAsync(aluno);
 
-            _alunoRepositoryMock.Setup(r => r.SaveChangesAsync()).ReturnsAsync(1);
-
             var command = new MatricularAlunoCommand { AlunoId = alunoId, CursoId = cursoId };
 
             // Act
@@ -42,12 +43,14 @@ namespace SchoolOfRock.Tests.Aluno.Application
             // Assert
             Assert.NotEqual(Guid.Empty, matriculaId);
 
-            _alunoRepositoryMock.Verify(r => r.Atualizar(It.IsAny<global::Aluno.Domain.AggregateModel.Aluno>()), Times.Once);
-            _alunoRepositoryMock.Verify(r => r.SaveChangesAsync(), Times.Once);
+            _matriculaRepositoryMock.Verify(r => r.AdicionarAsync(It.IsAny<Matricula>()), Times.Once);
+            _matriculaRepositoryMock.Verify(r => r.SaveChangesAsync(), Times.Once); // Verifique no mock correto
             _mediatorMock.Verify(m => m.Publish(
-                    It.IsAny<AlunoMatriculadoEvent>(),
+                    It.Is<INotification>(n => n is AlunoMatriculadoEvent),
                     It.IsAny<CancellationToken>()),
                 Times.Once);
+
+            _alunoRepositoryMock.Verify(r => r.SaveChangesAsync(), Times.Never);
         }
 
         [Fact]

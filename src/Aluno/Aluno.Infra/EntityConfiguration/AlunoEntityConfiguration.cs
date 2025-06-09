@@ -18,12 +18,12 @@ namespace Aluno.Infra.EntityConfiguration
                 .HasMaxLength(150);
 
             builder.HasMany(a => a.Matriculas)
-                .WithOne()
+                .WithOne(m => m.Aluno)
                 .HasForeignKey(m => m.AlunoId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasMany(a => a.Certificados)
-                .WithOne()
+                .WithOne(m => m.Aluno)
                 .HasForeignKey(c => c.AlunoId)
                 .OnDelete(DeleteBehavior.Cascade);
 

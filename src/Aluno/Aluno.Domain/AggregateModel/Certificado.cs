@@ -7,6 +7,7 @@ namespace Aluno.Domain.AggregateModel
         public Guid CursoId { get; private set; }
         public Guid AlunoId { get; private set; }
         public DateTime DataEmissao { get; private set; }
+        public virtual Aluno Aluno { get; private set; }
 
         protected Certificado() { }
 

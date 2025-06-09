@@ -1,9 +1,10 @@
 ﻿using Aluno.Domain.AggregateModel;
 using Microsoft.EntityFrameworkCore;
+using SchoolOfRock.Shared.Repository;
 
 namespace Aluno.Infra
 {
-    public class AlunoDbContext : DbContext
+    public class AlunoDbContext : DbContext, IUnitOfWork
     {
         public AlunoDbContext(DbContextOptions<AlunoDbContext> options) : base(options)
         {

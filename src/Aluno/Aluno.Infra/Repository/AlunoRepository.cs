@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SchoolOfRock.Shared.Repository;
 
 namespace Aluno.Infra.Repository
 {
@@ -6,6 +7,8 @@ namespace Aluno.Infra.Repository
     {
         private readonly AlunoDbContext _context;
         private readonly DbSet<Domain.AggregateModel.Aluno> _dbSet;
+
+        public IUnitOfWork UnitOfWork => _context;
 
         public AlunoRepository(AlunoDbContext context)
         {
@@ -33,6 +36,13 @@ namespace Aluno.Infra.Repository
                 throw new ArgumentNullException(nameof(aluno));
 
             await _dbSet.AddAsync(aluno);
+        }
+
+        public void Adicionar(Domain.AggregateModel.Aluno aluno)
+        {
+            if (aluno == null)
+                throw new ArgumentNullException(nameof(aluno));
+            _dbSet.Add(aluno);
         }
 
         public void Atualizar(Domain.AggregateModel.Aluno aluno)

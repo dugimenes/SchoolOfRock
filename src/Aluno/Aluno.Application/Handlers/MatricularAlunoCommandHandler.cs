@@ -10,11 +10,13 @@ namespace Aluno.Application.Handlers
     {
         private readonly IAlunoRepository _alunoRepository;
         private readonly IMediator _mediator;
+        private readonly IMatriculaRepository _matriculaRepository;
 
-        public MatricularAlunoCommandHandler(IAlunoRepository alunoRepository, IMediator mediator)
+        public MatricularAlunoCommandHandler(IAlunoRepository alunoRepository, IMediator mediator, IMatriculaRepository matriculaRepository)
         {
             _alunoRepository = alunoRepository;
             _mediator = mediator;
+            _matriculaRepository = matriculaRepository;
         }
 
         public async Task<Guid> Handle(MatricularAlunoCommand request, CancellationToken cancellationToken)
@@ -27,10 +29,9 @@ namespace Aluno.Application.Handlers
 
             var novaMatricula = new Matricula(request.CursoId, request.AlunoId);
 
-            aluno.AdicionarMatricula(novaMatricula);
+            await _matriculaRepository.AdicionarAsync(novaMatricula);
 
-            _alunoRepository.Atualizar(aluno);
-            await _alunoRepository.SaveChangesAsync();
+            await _matriculaRepository.SaveChangesAsync();
 
             await _mediator.Publish(new AlunoMatriculadoEvent(novaMatricula.Id, aluno.Id, request.CursoId), cancellationToken);
 
