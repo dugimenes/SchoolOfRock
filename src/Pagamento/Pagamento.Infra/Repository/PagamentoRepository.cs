@@ -13,25 +13,17 @@ namespace Pagamento.Infra.Repository
             _dbSet = _context.Set<Domain.AggregateModel.Pagamento>();
         }
 
-        /// <inheritdoc />
         public async Task<Domain.AggregateModel.Pagamento> ObterPorIdAsync(Guid id)
         {
-            // Busca direta pelo identificador primário
             return await _dbSet.FindAsync(id);
 
-            // Se precisar incluir navegação a Matricula, descomente e ajuste:
-            // return await _dbSet
-            //     .Include(p => p.Matricula)
-            //     .SingleOrDefaultAsync(p => p.Id == id);
         }
 
-        /// <inheritdoc />
         public async Task<IEnumerable<Domain.AggregateModel.Pagamento>> ObterTodosAsync()
         {
             return await _dbSet.ToListAsync();
         }
 
-        /// <inheritdoc />
         public async Task AdicionarAsync(Domain.AggregateModel.Pagamento pagamento)
         {
             if (pagamento == null)
@@ -40,7 +32,6 @@ namespace Pagamento.Infra.Repository
             await _dbSet.AddAsync(pagamento);
         }
 
-        /// <inheritdoc />
         public void Atualizar(Domain.AggregateModel.Pagamento pagamento)
         {
             if (pagamento == null)
@@ -49,7 +40,6 @@ namespace Pagamento.Infra.Repository
             _dbSet.Update(pagamento);
         }
 
-        /// <inheritdoc />
         public void Remover(Domain.AggregateModel.Pagamento pagamento)
         {
             if (pagamento == null)
@@ -58,13 +48,11 @@ namespace Pagamento.Infra.Repository
             _dbSet.Remove(pagamento);
         }
 
-        /// <inheritdoc />
         public async Task<int> SaveChangesAsync()
         {
             return await _context.SaveChangesAsync();
         }
 
-        /// <inheritdoc />
         public async Task<IEnumerable<Domain.AggregateModel.Pagamento>> ObterPorMatriculaIdAsync(Guid matriculaId)
         {
             return await _dbSet
