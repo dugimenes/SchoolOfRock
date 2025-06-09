@@ -31,8 +31,8 @@ namespace Identity.Infra.Services
                 claims: claims,
                 expires: expiracao,
                 signingCredentials: creds,
-                issuer: configuration["Jwt:Emissor"],
-                audience: configuration["Jwt:Audiencia"]
+                issuer: configuration["JwtSettings:Emissor"],
+                audience: configuration["JwtSettings:Audiencia"]
             );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
