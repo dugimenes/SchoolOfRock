@@ -4,6 +4,6 @@ namespace Identity.Infra.Services
 {
     public interface ITokenGenerator
     {
-        string GerarToken(ApplicationUser user);
+        Task<string> GerarToken(ApplicationUser user);
     }
 }

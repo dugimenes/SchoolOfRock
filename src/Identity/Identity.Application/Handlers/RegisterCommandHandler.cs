@@ -1,25 +1,26 @@
 ﻿using Identity.Application.Command;
 using Identity.Domain.AggregateModel;
-using Identity.Infra.Repository;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace Identity.Application.Handlers
 {
     public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Guid>
     {
-        private readonly IUserRepository _userRepository;
+        private readonly UserManager<ApplicationUser> _userManager; // Use o UserManager
         private readonly IMediator _mediator;
 
-        public RegisterCommandHandler(IUserRepository userRepository, IMediator mediator)
+        public RegisterCommandHandler(UserManager<ApplicationUser> userManager, IMediator mediator)
         {
-            _userRepository = userRepository;
+            _userManager = userManager;
             _mediator = mediator;
         }
 
         public async Task<Guid> Handle(RegisterCommand request, CancellationToken cancellationToken)
         {
-            if (await _userRepository.FindByEmailAsync(request.Login) != null)
+            var userExists = await _userManager.FindByEmailAsync(request.Login);
+            if (userExists != null)
             {
                 throw new Exception("O e-mail já está em uso.");
             }
@@ -28,22 +29,33 @@ namespace Identity.Application.Handlers
             {
                 UserName = request.Name,
                 Email = request.Login,
+                SecurityStamp = Guid.NewGuid().ToString()
             };
 
-            var passwordHasher = new PasswordHasher<ApplicationUser>();
-            newUser.PasswordHash = passwordHasher.HashPassword(newUser, request.Password);
+            var result = await _userManager.CreateAsync(newUser, request.Password);
 
-            var result = await _userRepository.CreateAsync(newUser);
-            
+            if (!result.Succeeded)
+            {
+                var errors = string.Join("\n", result.Errors.Select(e => e.Description));
+                throw new Exception($"Falha ao registrar usuário: {errors}");
+            }
+
+            if (await _userManager.Users.CountAsync() == 1)
+            {
+                await _userManager.AddToRoleAsync(newUser, "Admin");
+            }
+            else
+            {
+                await _userManager.AddToRoleAsync(newUser, "Normal");
+            }
+
             newUser.Cadastrar();
 
-            await _userRepository.SaveChangesAsync();
-
+            // A publicação de eventos continua a mesma
             foreach (var domainEvent in newUser.DomainEvents)
             {
                 await _mediator.Publish(domainEvent, cancellationToken);
             }
-
             newUser.ClearDomainEvents();
 
             return Guid.Parse(newUser.Id);

@@ -2,6 +2,7 @@
 using Conteudo.Application.Queries;
 using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace SchoolOfRock.Api.Controllers
@@ -17,6 +18,7 @@ namespace SchoolOfRock.Api.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CriarCurso([FromBody] CriarCursoCommand command)
         {
             var cursoId = await _mediator.Send(command);
@@ -52,6 +54,7 @@ namespace SchoolOfRock.Api.Controllers
         }
 
         [HttpPost("{id}/aulas")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AdicionarAula(Guid id, [FromBody] AdicionarAulaRequest request)
         {
             var command = new AdicionarAulaCommand

@@ -28,6 +28,7 @@ using SchoolOfRock.Api.Services;
 using SchoolOfRock.Domain.Models;
 using System.Data.Common;
 using System.Text;
+using System.Text.Json;
 
 namespace SchoolOfRock.Api.Configuration
 {
@@ -171,6 +172,20 @@ namespace SchoolOfRock.Api.Configuration
                             ValidateAudience = true,
                             ValidAudience = jwtSettings.Audiencia,
                             ValidIssuer = jwtSettings.Emissor
+                        };
+
+                        options.Events = new JwtBearerEvents
+                        {
+                            OnForbidden = context =>
+                            {
+                                context.Response.ContentType = "application/json";
+                                context.Response.StatusCode = StatusCodes.Status403Forbidden;
+
+                                return context.Response.WriteAsync(JsonSerializer.Serialize(new
+                                {
+                                    message = "Você não tem permissão para acessar este recurso."
+                                }));
+                            }
                         };
                     });
             }

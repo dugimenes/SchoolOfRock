@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Pagamento.Application.Command;
 
@@ -15,6 +16,7 @@ namespace SchoolOfRock.Api.Controllers
         }
 
         [HttpPost("{pagamentoId}/confirmar")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> ConfirmarPagamento(Guid pagamentoId)
         {
             var command = new ConfirmarPagamentoCommand { PagamentoId = pagamentoId };

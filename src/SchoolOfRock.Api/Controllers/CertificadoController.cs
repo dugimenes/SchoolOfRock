@@ -2,6 +2,7 @@
 using Aluno.Application.Queries;
 using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace SchoolOfRock.Api.Controllers
@@ -17,6 +18,7 @@ namespace SchoolOfRock.Api.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GerarCertificado([FromBody] GerarCertificadoCommand command)
         {
             try
@@ -45,6 +47,7 @@ namespace SchoolOfRock.Api.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AtualizarCertificado(Guid id, [FromBody] AtualizarCertificadoRequest request)
         {
             var command = new AtualizarCertificadoCommand

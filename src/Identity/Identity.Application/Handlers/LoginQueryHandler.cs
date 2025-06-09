@@ -26,7 +26,7 @@ namespace Identity.Application.Handlers
                 return new LoginResultDto { Sucesso = false, Erro = "Usuário ou senha inválidos." };
             }
 
-            var token = _tokenGenerator.GerarToken(user);
+            var token = await _tokenGenerator.GerarToken(user);
 
             return new LoginResultDto { Sucesso = true, Token = token };
         }
