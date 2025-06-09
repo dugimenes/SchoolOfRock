@@ -73,5 +73,31 @@ namespace SchoolOfRock.Tests.Aluno.Application
                     It.IsAny<CancellationToken>()),
                 Times.Never);
         }
+
+        [Fact]
+        public async Task Handle_Deve_Lancar_Excecao_Quando_Aluno_Ja_Esta_Matriculado()
+        {
+            // Arrange
+            var alunoId = Guid.NewGuid();
+            var cursoId = Guid.NewGuid();
+            var aluno = new global::Aluno.Domain.AggregateModel.Aluno(alunoId, "Eduardo", "email@gmail.com");
+
+            var matriculaExistente = new Matricula(cursoId, alunoId);
+
+            _alunoRepositoryMock.Setup(r => r.ObterPorIdAsync(alunoId))
+                .ReturnsAsync(aluno);
+
+            _matriculaRepositoryMock.Setup(r => r.ObterPorAlunoECursoIdAsync(alunoId, cursoId))
+                .ReturnsAsync(matriculaExistente);
+
+            var command = new MatricularAlunoCommand { AlunoId = alunoId, CursoId = cursoId };
+
+            // Act & Assert
+            var exception = await Assert.ThrowsAsync<Exception>(() => _handler.Handle(command, CancellationToken.None));
+            Assert.Equal("Aluno já está matriculado neste curso.", exception.Message);
+            _matriculaRepositoryMock.Verify(r => r.AdicionarAsync(It.IsAny<Matricula>()), Times.Never);
+
+            _mediatorMock.Verify(m => m.Publish(It.IsAny<INotification>(), It.IsAny<CancellationToken>()), Times.Never);
+        }
     }
 }

@@ -27,6 +27,13 @@ namespace Aluno.Application.Handlers
                 throw new Exception("Aluno não encontrado.");
             }
 
+            var matricula = await _matriculaRepository.ObterPorAlunoECursoIdAsync(request.AlunoId, request.CursoId);
+
+            if (matricula != null)
+            {
+                throw new Exception("Aluno já está matriculado neste curso.");
+            }
+
             var novaMatricula = new Matricula(request.CursoId, request.AlunoId);
 
             await _matriculaRepository.AdicionarAsync(novaMatricula);
