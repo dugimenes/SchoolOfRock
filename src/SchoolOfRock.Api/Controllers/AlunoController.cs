@@ -1,6 +1,7 @@
 ﻿using Aluno.Application.Command;
 using Aluno.Application.Queries;
 using Conteudo.Application.Queries;
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -43,6 +44,11 @@ namespace SchoolOfRock.Api.Controllers
             {
                 var matriculaId = await _mediator.Send(command);
                 return Ok(new { message = "Matrícula realizada com sucesso.", matriculaId });
+            }
+            catch (ValidationException ex)
+            {
+                var errors = ex.Errors.Select(e => new { e.PropertyName, e.ErrorMessage });
+                return BadRequest(new { message = "Ocorreram erros de validação.", errors });
             }
             catch (Exception ex)
             {

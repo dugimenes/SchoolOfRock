@@ -1,5 +1,6 @@
 ﻿using Conteudo.Application.Command;
 using Conteudo.Application.Queries;
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -51,6 +52,11 @@ namespace SchoolOfRock.Api.Controllers
             {
                 var aulaId = await _mediator.Send(command);
                 return Ok(new { message = "Aula adicionada com sucesso.", aulaId });
+            }
+            catch (ValidationException ex)
+            {
+                var errors = ex.Errors.Select(e => new { e.PropertyName, e.ErrorMessage });
+                return BadRequest(new { message = "Ocorreram erros de validação.", errors });
             }
             catch (Exception ex)
             {

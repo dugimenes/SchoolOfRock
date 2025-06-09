@@ -1,4 +1,5 @@
-﻿using Aluno.Infra;
+﻿using FluentValidation;
+using Aluno.Infra;
 using Aluno.Infra.Repository;
 using Conteudo.Application.Command;
 using Conteudo.Application.Queries;
@@ -18,6 +19,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Pagamento.Infra;
 using Pagamento.Infra.Repository;
+using SchoolOfRock.Api.Behaviors;
 using SchoolOfRock.Api.Services;
 using SchoolOfRock.Domain.Models;
 using SchoolOfRock.Shared.Repository;
@@ -53,6 +55,9 @@ namespace SchoolOfRock.Api.Configuration
                 typeof(Aluno.Application.Handlers.UsuarioCriadoHandler).Assembly,
                 typeof(Pagamento.Application.Command.ConfirmarPagamentoCommand).Assembly
             ));
+
+            services.AddValidatorsFromAssembly(typeof(RegisterCommand).Assembly);
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
             services.AddSwaggerGen(c =>
             {
@@ -168,6 +173,7 @@ namespace SchoolOfRock.Api.Configuration
             services.AddScoped<IPagamentoRepository, PagamentoRepository>();
             services.AddScoped<ICursoRepository, CursoRepository>();
             services.AddScoped<IMatriculaRepository, MatriculaRepository>();
+            services.AddScoped<ICertificadoRepository, CertificadoRepository>();
 
             if (!string.IsNullOrEmpty(jwtSettings?.Segredo))
             {

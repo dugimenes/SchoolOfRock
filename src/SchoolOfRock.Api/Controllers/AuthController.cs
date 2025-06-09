@@ -1,4 +1,5 @@
-﻿using Identity.Application.Command;
+﻿using FluentValidation;
+using Identity.Application.Command;
 using Identity.Application.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -38,6 +39,11 @@ namespace SchoolOfRock.Api.Controllers
             {
                 var userId = await _mediator.Send(command);
                 return Ok(new { message = "Usuário registrado com sucesso.", userId });
+            }
+            catch (ValidationException ex)
+            {
+                var errors = ex.Errors.Select(e => new { e.PropertyName, e.ErrorMessage });
+                return BadRequest(new { message = "Ocorreram erros de validação.", errors });
             }
             catch (Exception ex)
             {

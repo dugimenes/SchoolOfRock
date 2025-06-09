@@ -1,5 +1,6 @@
 ﻿using Aluno.Application.Command;
 using Aluno.Application.Queries;
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,6 +24,11 @@ namespace SchoolOfRock.Api.Controllers
                 var certificadoDto = await _mediator.Send(command);
                 return CreatedAtAction(nameof(ObterCertificadosPorAluno), new { alunoId = certificadoDto.AlunoId },
                     certificadoDto);
+            }
+            catch (ValidationException ex)
+            {
+                var errors = ex.Errors.Select(e => new { e.PropertyName, e.ErrorMessage });
+                return BadRequest(new { message = "Ocorreram erros de validação.", errors });
             }
             catch (Exception ex)
             {
@@ -57,6 +63,11 @@ namespace SchoolOfRock.Api.Controllers
                 }
 
                 return NoContent();
+            }
+            catch (ValidationException ex)
+            {
+                var errors = ex.Errors.Select(e => new { e.PropertyName, e.ErrorMessage });
+                return BadRequest(new { message = "Ocorreram erros de validação.", errors });
             }
             catch (Exception ex)
             {
