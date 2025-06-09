@@ -18,11 +18,11 @@ namespace Aluno.Infra.Repository
 
         public async Task<Domain.AggregateModel.Aluno> ObterPorIdAsync(Guid id)
         {
-            return await _dbSet.FindAsync(id);
-            // return await _dbSet
-            //     .Include(a => a.Matriculas)
-            //     .Include(a => a.Certificados)
-            //     .SingleOrDefaultAsync(a => a.Id == id);
+            //return await _dbSet.FindAsync(id);
+            return await _dbSet
+                 .Include(a => a.Matriculas)
+                 .Include(a => a.Certificados)
+                 .SingleOrDefaultAsync(a => a.Id == id);
         }
 
         public async Task<IEnumerable<Domain.AggregateModel.Aluno>> ObterTodosAsync()

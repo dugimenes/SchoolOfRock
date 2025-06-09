@@ -16,7 +16,10 @@ namespace Conteudo.Infra.Repository
 
         public async Task<Curso> ObterPorIdAsync(Guid id)
         {
-            return await _dbSet.FindAsync(id);
+            //return await _dbSet.FindAsync(id);
+            return await _dbSet
+                .Include(c => c.Aulas)
+                .SingleOrDefaultAsync(c => c.Id == id);
         }
 
         public async Task<IEnumerable<Curso>> ObterTodosAsync()

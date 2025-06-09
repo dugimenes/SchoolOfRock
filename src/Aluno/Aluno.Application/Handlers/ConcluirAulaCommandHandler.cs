@@ -19,7 +19,6 @@ namespace Aluno.Application.Handlers
             if (aluno == null)
             {
                 throw new Exception("Verifique o Id informado para o aluno.");
-                return false;
             }
 
             // A lógica de adicionar a aula concluída é delegada para a entidade de domínio
