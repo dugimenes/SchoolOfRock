@@ -33,7 +33,7 @@ namespace SchoolOfRock.Tests.Identity.Application
 
             _userRepositoryMock.Setup(r => r.FindByEmailAsync(email)).ReturnsAsync(user);
             _userRepositoryMock.Setup(r => r.CheckPasswordAsync(user, password)).ReturnsAsync(true);
-            _tokenGeneratorMock.Setup(g => g.GerarToken(user)).Returns(token);
+            _tokenGeneratorMock.Setup(g => g.GerarToken(user)).ReturnsAsync(token);
 
             // Act
             var result = await _handler.Handle(query, CancellationToken.None);

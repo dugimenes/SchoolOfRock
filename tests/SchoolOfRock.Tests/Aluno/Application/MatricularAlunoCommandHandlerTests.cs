@@ -1,107 +1,103 @@
 ﻿using Aluno.Application.Command;
-using Aluno.Application.Dtos;
 using Aluno.Application.Handlers;
 using Aluno.Domain.AggregateModel;
-using Aluno.Infra;
 using Aluno.Infra.Repository;
-using Microsoft.Data.Sqlite;
-using Microsoft.EntityFrameworkCore;
-using Pagamento.Infra;
-using Pagamento.Infra.Repository;
-using System.Data.Common;
+using MediatR;
+using Moq;
+using SchoolOfRock.Contracts.Aluno.Events;
 using Xunit;
 
 namespace SchoolOfRock.Tests.Aluno.Application
 {
-    public class MatricularAlunoCommandHandlerTests : IDisposable
+    public class MatricularAlunoCommandHandlerTests
     {
-        private readonly AlunoDbContext _alunoDbContext;
-        private readonly PagamentoDbContext _pagamentoDbContext;
-        private readonly DbConnection _connection;
+        private readonly Mock<IAlunoRepository> _alunoRepositoryMock;
+        private readonly Mock<IMatriculaRepository> _matriculaRepositoryMock;
         private readonly MatricularAlunoCommandHandler _handler;
-
-        private class TestSchemaBuilderDbContext : DbContext
-        {
-            public DbSet<global::Aluno.Domain.AggregateModel.Aluno> Alunos { get; set; }
-            public DbSet<Matricula> Matriculas { get; set; }
-            public DbSet<Certificado> Certificados { get; set; }
-            public DbSet<global::Pagamento.Domain.AggregateModel.Pagamento> Pagamentos { get; set; }
-
-            public TestSchemaBuilderDbContext(DbConnection connection)
-                : base(new DbContextOptionsBuilder().UseSqlite(connection).Options) { }
-
-            protected override void OnModelCreating(ModelBuilder modelBuilder)
-            {
-                base.OnModelCreating(modelBuilder);
-                
-                modelBuilder.ApplyConfigurationsFromAssembly(typeof(AlunoDbContext).Assembly);
-                modelBuilder.ApplyConfigurationsFromAssembly(typeof(PagamentoDbContext).Assembly);
-            }
-        }
+        private readonly Mock<IMediator> _mediatorMock;
 
         public MatricularAlunoCommandHandlerTests()
         {
-            _connection = new SqliteConnection("DataSource=:memory:");
-            _connection.Open();
-
-            using (var schemaBuilderContext = new TestSchemaBuilderDbContext(_connection))
-            {
-                schemaBuilderContext.Database.EnsureCreated();
-            }
-
-            var alunoDbOptions = new DbContextOptionsBuilder<AlunoDbContext>().UseSqlite(_connection).Options;
-            _alunoDbContext = new AlunoDbContext(alunoDbOptions);
-
-            var pagamentoDbOptions = new DbContextOptionsBuilder<PagamentoDbContext>().UseSqlite(_connection).Options;
-            _pagamentoDbContext = new PagamentoDbContext(pagamentoDbOptions);
-
-            var alunoRepository = new AlunoRepository(_alunoDbContext);
-            var matriculaRepository = new MatriculaRepository(_alunoDbContext);
-            var pagamentoRepository = new PagamentoRepository(_pagamentoDbContext);
-
-            _handler = new MatricularAlunoCommandHandler(
-                alunoRepository, matriculaRepository, pagamentoRepository, _alunoDbContext, _pagamentoDbContext
-            );
+            _alunoRepositoryMock = new Mock<IAlunoRepository>();
+            _matriculaRepositoryMock = new Mock<IMatriculaRepository>();
+            _mediatorMock = new Mock<IMediator>();
+            _handler = new MatricularAlunoCommandHandler(_alunoRepositoryMock.Object, _mediatorMock.Object, _matriculaRepositoryMock.Object);
         }
 
         [Fact]
-        public async Task Handle_Deve_Completar_Transacao_e_Persistir_Todos_Os_Dados()
+        public async Task Handle_Deve_Retornar_Id_Da_Nova_Matricula_Quando_Aluno_Existe()
         {
             // Arrange
             var alunoId = Guid.NewGuid();
             var cursoId = Guid.NewGuid();
             var aluno = new global::Aluno.Domain.AggregateModel.Aluno(alunoId, "Eduardo", "email@gmail.com");
 
-            _alunoDbContext.Alunos.Add(aluno);
-            await _alunoDbContext.SaveChangesAsync();
+            _alunoRepositoryMock.Setup(r => r.ObterPorIdAsync(alunoId))
+                .ReturnsAsync(aluno);
 
-            var dadosCartaoDto = new DadosCartaoDto { Numero = "1234", NomeTitular = "Teste", Expiracao = "12/25", Cvv = "123" };
-            var command = new MatricularAlunoCommand
-            {
-                AlunoId = alunoId,
-                CursoId = cursoId,
-                DadosCartao = dadosCartaoDto
-            };
+            var command = new MatricularAlunoCommand { AlunoId = alunoId, CursoId = cursoId };
 
             // Act
-            var resultado = await _handler.Handle(command, CancellationToken.None);
+            var matriculaId = await _handler.Handle(command, CancellationToken.None);
 
             // Assert
-            Assert.NotNull(resultado);
-            Assert.NotEqual(Guid.Empty, resultado.MatriculaId);
-            Assert.NotEqual(Guid.Empty, resultado.PagamentoId);
+            Assert.NotEqual(Guid.Empty, matriculaId);
 
-            var matriculaSalva = await _alunoDbContext.Matriculas.FindAsync(resultado.MatriculaId);
-            var pagamentoSalvo = await _pagamentoDbContext.Pagamentos.FindAsync(resultado.PagamentoId);
+            _matriculaRepositoryMock.Verify(r => r.AdicionarAsync(It.IsAny<Matricula>()), Times.Once);
+            _matriculaRepositoryMock.Verify(r => r.SaveChangesAsync(), Times.Once); // Verifique no mock correto
+            _mediatorMock.Verify(m => m.Publish(
+                    It.Is<INotification>(n => n is AlunoMatriculadoEvent),
+                    It.IsAny<CancellationToken>()),
+                Times.Once);
 
-            Assert.NotNull(matriculaSalva);
-            Assert.NotNull(pagamentoSalvo);
-            Assert.Equal(resultado.MatriculaId, pagamentoSalvo.MatriculaId);
+            _alunoRepositoryMock.Verify(r => r.SaveChangesAsync(), Times.Never);
         }
 
-        public void Dispose()
+        [Fact]
+        public async Task Handle_Deve_Lancar_Excecao_Quando_Aluno_Nao_Existe()
         {
-            _connection.Close();
+            // Arrange
+            var alunoId = Guid.NewGuid();
+            var cursoId = Guid.NewGuid();
+
+            _alunoRepositoryMock.Setup(r => r.ObterPorIdAsync(alunoId))
+                .ReturnsAsync((global::Aluno.Domain.AggregateModel.Aluno)null);
+
+            var command = new MatricularAlunoCommand { AlunoId = alunoId, CursoId = cursoId };
+
+            // Act & Assert
+            await Assert.ThrowsAsync<Exception>(() => _handler.Handle(command, CancellationToken.None));
+
+            _mediatorMock.Verify(m => m.Publish(
+                    It.IsAny<INotification>(),
+                    It.IsAny<CancellationToken>()),
+                Times.Never);
+        }
+
+        [Fact]
+        public async Task Handle_Deve_Lancar_Excecao_Quando_Aluno_Ja_Esta_Matriculado()
+        {
+            // Arrange
+            var alunoId = Guid.NewGuid();
+            var cursoId = Guid.NewGuid();
+            var aluno = new global::Aluno.Domain.AggregateModel.Aluno(alunoId, "Eduardo", "email@gmail.com");
+
+            var matriculaExistente = new Matricula(cursoId, alunoId);
+
+            _alunoRepositoryMock.Setup(r => r.ObterPorIdAsync(alunoId))
+                .ReturnsAsync(aluno);
+
+            _matriculaRepositoryMock.Setup(r => r.ObterPorAlunoECursoIdAsync(alunoId, cursoId))
+                .ReturnsAsync(matriculaExistente);
+
+            var command = new MatricularAlunoCommand { AlunoId = alunoId, CursoId = cursoId };
+
+            // Act & Assert
+            var exception = await Assert.ThrowsAsync<Exception>(() => _handler.Handle(command, CancellationToken.None));
+            Assert.Equal("Aluno já está matriculado neste curso.", exception.Message);
+            _matriculaRepositoryMock.Verify(r => r.AdicionarAsync(It.IsAny<Matricula>()), Times.Never);
+
+            _mediatorMock.Verify(m => m.Publish(It.IsAny<INotification>(), It.IsAny<CancellationToken>()), Times.Never);
         }
     }
 }

@@ -38,19 +38,13 @@ namespace SchoolOfRock.Api.Controllers
             var command = new MatricularAlunoCommand
             {
                 AlunoId = id,
-                CursoId = request.CursoId,
-                DadosCartao = request.DadosCartao
+                CursoId = request.CursoId
             };
 
             try
             {
-                var resultado = await _mediator.Send(command);
-                return Ok(new
-                {
-                    message = "Matrícula e Pagamento criados com sucesso.",
-                    matriculaId = resultado.MatriculaId,
-                    pagamentoId = resultado.PagamentoId
-                });
+                var matriculaId = await _mediator.Send(command);
+                return Ok(new { message = "Matrícula realizada com sucesso.", matriculaId });
             }
             catch (ValidationException ex)
             {
