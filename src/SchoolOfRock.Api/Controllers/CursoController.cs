@@ -53,6 +53,21 @@ namespace SchoolOfRock.Api.Controllers
             return Ok(curso);
         }
 
+        [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Deletar(Guid id)
+        {
+            var command = new DeletarCursoCommand(id);
+            var sucesso = await _mediator.Send(command);
+
+            if (!sucesso)
+            {
+                return NotFound();
+            }
+
+            return NoContent();
+        }
+
         [HttpPost("{id}/CadastrarAula")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AdicionarAula(Guid id, [FromBody] AdicionarAulaRequest request)

@@ -4,6 +4,7 @@ using Aluno.Application.Queries;
 using Conteudo.Application.Queries;
 using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace SchoolOfRock.Api.Controllers
@@ -61,6 +62,40 @@ namespace SchoolOfRock.Api.Controllers
             {
                 return BadRequest(new { message = ex.Message });
             }
+        }
+
+        [HttpDelete("RemoverMatricula/{matriculaId}")]
+        [Authorize(Roles = "Admin")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> DeletarMatricula(Guid matriculaId)
+        {
+            var command = new DeletarMatriculaCommand(matriculaId);
+            var sucesso = await _mediator.Send(command);
+
+            if (!sucesso)
+            {
+                return NotFound();
+            }
+
+            return NoContent();
+        }
+
+        [HttpDelete("RemoverAluno/{id}")]
+        [Authorize(Roles = "Admin")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> Deletar(Guid id)
+        {
+            var command = new DeletarAlunoCommand(id);
+            var sucesso = await _mediator.Send(command);
+
+            if (!sucesso)
+            {
+                return NotFound();
+            }
+
+            return NoContent();
         }
 
         [HttpGet("{id}/ObterHistorico")]

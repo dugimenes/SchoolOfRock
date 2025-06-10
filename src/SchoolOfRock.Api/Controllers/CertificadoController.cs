@@ -46,6 +46,23 @@ namespace SchoolOfRock.Api.Controllers
             return Ok(certificados);
         }
 
+        [HttpDelete("{certificadoId}")]
+        [Authorize(Roles = "Admin")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> Deletar(Guid certificadoId)
+        {
+            var command = new DeletarCertificadoCommand(certificadoId);
+            var sucesso = await _mediator.Send(command);
+
+            if (!sucesso)
+            {
+                return NotFound();
+            }
+
+            return NoContent();
+        }
+
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AtualizarCertificado(Guid id, [FromBody] AtualizarCertificadoRequest request)
