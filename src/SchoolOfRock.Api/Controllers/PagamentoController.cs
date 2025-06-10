@@ -15,11 +15,11 @@ namespace SchoolOfRock.Api.Controllers
             _mediator = mediator;
         }
 
-        [HttpPost("{pagamentoId}/confirmar")]
+        [HttpPost("{matriculaId}/Confirmar")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> ConfirmarPagamento(Guid pagamentoId)
+        public async Task<IActionResult> ConfirmarPagamento(Guid matriculaId)
         {
-            var command = new ConfirmarPagamentoCommand { PagamentoId = pagamentoId };
+            var command = new ConfirmarPagamentoCommand { MatriculaId = matriculaId };
             var sucesso = await _mediator.Send(command);
 
             if (!sucesso)

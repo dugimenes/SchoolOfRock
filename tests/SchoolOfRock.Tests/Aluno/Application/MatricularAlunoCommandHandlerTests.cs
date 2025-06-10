@@ -1,4 +1,5 @@
 ﻿using Aluno.Application.Command;
+using Aluno.Application.Dtos;
 using Aluno.Application.Handlers;
 using Aluno.Domain.AggregateModel;
 using Aluno.Infra.Repository;
@@ -35,16 +36,30 @@ namespace SchoolOfRock.Tests.Aluno.Application
             _alunoRepositoryMock.Setup(r => r.ObterPorIdAsync(alunoId))
                 .ReturnsAsync(aluno);
 
-            var command = new MatricularAlunoCommand { AlunoId = alunoId, CursoId = cursoId };
+            var dadosCartaoDto = new DadosCartaoDto
+            {
+                Numero = "1111222233334444",
+                NomeTitular = "Eduardo Teste",
+                Expiracao = "12/28",
+                Cvv = "987"
+            };
 
-            // Act
+            var command = new MatricularAlunoCommand
+            {
+                AlunoId = alunoId,
+                CursoId = cursoId,
+                DadosCartao = dadosCartaoDto
+            };
+
             var matriculaId = await _handler.Handle(command, CancellationToken.None);
 
             // Assert
             Assert.NotEqual(Guid.Empty, matriculaId);
 
+            _alunoRepositoryMock.Verify(r => r.Atualizar(It.IsAny<global::Aluno.Domain.AggregateModel.Aluno>()), Times.Once);
             _matriculaRepositoryMock.Verify(r => r.AdicionarAsync(It.IsAny<Matricula>()), Times.Once);
-            _matriculaRepositoryMock.Verify(r => r.SaveChangesAsync(), Times.Once); // Verifique no mock correto
+            _matriculaRepositoryMock.Verify(r => r.SaveChangesAsync(), Times.Once);
+
             _mediatorMock.Verify(m => m.Publish(
                     It.Is<INotification>(n => n is AlunoMatriculadoEvent),
                     It.IsAny<CancellationToken>()),

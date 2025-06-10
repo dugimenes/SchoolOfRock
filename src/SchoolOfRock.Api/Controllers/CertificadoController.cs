@@ -38,7 +38,7 @@ namespace SchoolOfRock.Api.Controllers
             }
         }
 
-        [HttpGet("aluno/{alunoId}")]
+        [HttpGet("ObterCertificadoAluno/{alunoId}")]
         public async Task<IActionResult> ObterCertificadosPorAluno(Guid alunoId)
         {
             var query = new ListarCertificadosPorAlunoQuery(alunoId);

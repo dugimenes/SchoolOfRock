@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Pagamento.Domain.AggregateModel;
 
 namespace Pagamento.Infra.Repository
 {
@@ -17,6 +18,12 @@ namespace Pagamento.Infra.Repository
         {
             return await _dbSet.FindAsync(id);
 
+        }
+
+        public async Task<Domain.AggregateModel.Pagamento> ObterPagamentoMatriculaPendenteAsync(Guid matriculaId)
+        {
+            return await _dbSet
+                .SingleOrDefaultAsync(a => a.MatriculaId == matriculaId && a.StatusPagamento == StatusPagamento.Pendente);
         }
 
         public async Task<IEnumerable<Domain.AggregateModel.Pagamento>> ObterTodosAsync()

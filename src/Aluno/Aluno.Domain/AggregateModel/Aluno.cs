@@ -40,6 +40,20 @@ namespace Aluno.Domain.AggregateModel
             Matriculas.Add(matricula);
         }
 
+        public void AtualizarDados(string nome, string email)
+        {
+            if (string.IsNullOrWhiteSpace(nome))
+            {
+                throw new ArgumentException("Nome não pode ser nulo ou vazio.", nameof(nome));
+            }
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                throw new ArgumentException("Email não pode ser nulo ou vazio.", nameof(email));
+            }
+            Nome = nome;
+            Email = email;
+        }
+
         public void AtualizarDadosCartao(DadosCartao dadosCartao)
         {
             DadosCartao = dadosCartao ?? throw new ArgumentNullException(nameof(dadosCartao), "Dados do cartão não podem ser nulos.");

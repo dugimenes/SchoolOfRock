@@ -25,23 +25,18 @@ namespace Pagamento.Domain.AggregateModel
         {
             if (StatusPagamento == StatusPagamento.Confirmado)
             {
-                // Regra de negócio: não confirmar um pagamento já confirmado
                 return;
             }
 
             StatusPagamento = StatusPagamento.Confirmado;
 
-            // *** AQUI A MÁGICA ACONTECE ***
-            // A entidade cria e adiciona o evento à sua própria lista.
             this.AddDomainEvent(new PagamentoConfirmadoEvent(this.MatriculaId));
         }
 
         public void Rejeitar()
         {
             StatusPagamento = StatusPagamento.Rejeitado;
-            // Poderia ter um evento de PagamentoRejeitadoEvent aqui também
         }
-
 
         public void AddDomainEvent(INotification eventItem)
         {

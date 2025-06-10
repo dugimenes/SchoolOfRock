@@ -34,6 +34,10 @@ namespace Aluno.Application.Handlers
                 throw new Exception("Aluno já está matriculado neste curso.");
             }
 
+            var dadosCartao = new DadosCartao(request.DadosCartao.Numero, request.DadosCartao.NomeTitular, request.DadosCartao.Expiracao, request.DadosCartao.Cvv);
+            aluno.AtualizarDadosCartao(dadosCartao);
+            _alunoRepository.Atualizar(aluno);
+
             var novaMatricula = new Matricula(request.CursoId, request.AlunoId);
 
             await _matriculaRepository.AdicionarAsync(novaMatricula);

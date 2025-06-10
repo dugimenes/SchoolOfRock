@@ -30,10 +30,10 @@ namespace SchoolOfRock.Tests.Pagamento.Application
             var matriculaId = Guid.NewGuid();
             var pagamento = new global::Pagamento.Domain.AggregateModel.Pagamento(matriculaId) { Id = pagamentoId };
 
-            _pagamentoRepositoryMock.Setup(r => r.ObterPorIdAsync(pagamentoId))
+            _pagamentoRepositoryMock.Setup(r => r.ObterPagamentoMatriculaPendenteAsync(matriculaId))
                 .ReturnsAsync(pagamento);
 
-            var command = new ConfirmarPagamentoCommand { PagamentoId = pagamentoId };
+            var command = new ConfirmarPagamentoCommand { MatriculaId = matriculaId };
 
             // Act
             var result = await _handler.Handle(command, CancellationToken.None);

@@ -39,7 +39,7 @@ namespace SchoolOfRock.Api.Controllers
             return Ok(curso);
         }
 
-        [HttpGet("/listar")]
+        [HttpGet("/Listar")]
         public async Task<IActionResult> Listar()
         {
             var query = new ListarCursosQuery();
@@ -53,7 +53,7 @@ namespace SchoolOfRock.Api.Controllers
             return Ok(curso);
         }
 
-        [HttpPost("{id}/aulas")]
+        [HttpPost("{id}/CadastrarAula")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AdicionarAula(Guid id, [FromBody] AdicionarAulaRequest request)
         {

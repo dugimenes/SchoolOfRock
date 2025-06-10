@@ -81,6 +81,10 @@ A estrutura do projeto é organizada da seguinte forma:
    - `dotnet run`
    - Acesse a documentação da API em: http://localhost:7292/swagger
 
+4. **Informações**
+   - Para atendimento da regra de negócio, o primeiro usuário a ser cadastrado será considerado admin. Os demais alunos.
+   - Por critério de segurança, dados de cartão só serão atualizados durante uma requisição de matrícula.
+
 ## **7. Instruções de Configuração**
 
 - **JWT para API:** As chaves de configuração do JWT estão no `appsettings.json`.

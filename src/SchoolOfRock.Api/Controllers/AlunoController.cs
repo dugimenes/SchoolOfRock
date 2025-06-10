@@ -19,6 +19,9 @@ namespace SchoolOfRock.Api.Controllers
         }
 
         [HttpGet("{id}")]
+        [ProducesResponseType(typeof(MatriculaRealizadaDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> ObterPorId(Guid id)
         {
             var query = new ObterAlunoPorIdQuery(id);
@@ -32,13 +35,16 @@ namespace SchoolOfRock.Api.Controllers
             return Ok(aluno);
         }
 
-        [HttpPost("{id}/matricular")]
+        [HttpPost("{id}/Matricular")]
+        [ProducesResponseType(typeof(AlunoDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Matricular(Guid id, [FromBody] MatricularAlunoRequest request)
         {
             var command = new MatricularAlunoCommand
             {
                 AlunoId = id,
-                CursoId = request.CursoId
+                CursoId = request.CursoId,
+                DadosCartao = request.DadosCartao
             };
 
             try
@@ -57,7 +63,10 @@ namespace SchoolOfRock.Api.Controllers
             }
         }
 
-        [HttpGet("{id}/historico")]
+        [HttpGet("{id}/ObterHistorico")]
+        [ProducesResponseType(typeof(MatriculaRealizadaDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> ObterHistorico(Guid id)
         {
             var query = new ObterHistoricoAprendizadoQuery(id);
@@ -71,7 +80,44 @@ namespace SchoolOfRock.Api.Controllers
             return Ok(historico);
         }
 
-        [HttpPost("{alunoId}/aulas/{aulaId}/concluir")]
+        [HttpPut("Atualizar{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Atualizar(Guid id, [FromBody] AtualizarAlunoRequest request)
+        {
+            var command = new AtualizarAlunoCommand
+            {
+                Id = id,
+                Nome = request.Nome,
+                Email = request.Email
+            };
+
+            try
+            {
+                var sucesso = await _mediator.Send(command);
+
+                if (!sucesso)
+                {
+                    return NotFound(new { message = "Aluno não encontrado." });
+                }
+
+                return NoContent();
+            }
+            catch (ValidationException ex)
+            {
+                var errors = ex.Errors.Select(e => new { e.PropertyName, e.ErrorMessage });
+                return BadRequest(new { message = "Ocorreram erros de validação.", errors });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        [HttpPost("{alunoId}/Aula/{aulaId}/Concluir")]
+        [ProducesResponseType(typeof(AlunoDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> ConcluirAula(Guid alunoId, Guid aulaId)
         {
             var command = new ConcluirAulaCommand
@@ -96,5 +142,11 @@ namespace SchoolOfRock.Api.Controllers
         public Guid CursoId { get; set; }
 
         public DadosCartaoDto DadosCartao { get; set; }
+    }
+
+    public class AtualizarAlunoRequest
+    {
+        public string Nome { get; set; }
+        public string Email { get; set; }
     }
 }

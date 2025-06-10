@@ -19,7 +19,7 @@ namespace SchoolOfRock.Api.Controllers
             _mediator = mediator;
         }
 
-        [HttpPost("login")]
+        [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] LoginQuery query)
         {
             var result = await _mediator.Send(query);
@@ -32,7 +32,7 @@ namespace SchoolOfRock.Api.Controllers
             return Ok(new { token = result.Token });
         }
 
-        [HttpPost("register")]
+        [HttpPost("Register")]
         public async Task<IActionResult> Register([FromBody] RegisterCommand command)
         {
             try

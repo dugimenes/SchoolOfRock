@@ -30,6 +30,7 @@ namespace SchoolOfRock.Tests.Pagamento.Integration
             var alunoId = Guid.NewGuid();
             var cursoId = Guid.NewGuid();
             var matricula = new Matricula(cursoId, alunoId);
+
             alunoDbContext.Matriculas.Add(matricula);
             await alunoDbContext.SaveChangesAsync();
 
@@ -38,12 +39,12 @@ namespace SchoolOfRock.Tests.Pagamento.Integration
             var pagamento = new global::Pagamento.Domain.AggregateModel.Pagamento(matricula.Id);
             pagamento.Confirmar(); // Gera o evento de domínio
 
-            pagamentoRepositoryMock.Setup(r => r.ObterPorIdAsync(pagamento.Id)).ReturnsAsync(pagamento);
+            pagamentoRepositoryMock.Setup(r => r.ObterPagamentoMatriculaPendenteAsync(matricula.Id)).ReturnsAsync(pagamento);
 
             var confirmarPagamentoHandler = new ConfirmarPagamentoCommandHandler(pagamentoRepositoryMock.Object, mediatorMock.Object);
             var pagamentoConfirmadoHandler = new PagamentoConfirmadoHandler(matriculaRepository);
 
-            var command = new ConfirmarPagamentoCommand { PagamentoId = pagamento.Id };
+            var command = new ConfirmarPagamentoCommand { MatriculaId = matricula.Id };
 
             // Act
             await confirmarPagamentoHandler.Handle(command, CancellationToken.None);
